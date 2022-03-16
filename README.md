@@ -18,7 +18,7 @@ npx create-react-app memento-front --template typescript
 
 # Installation des paquet sur le frontend
 cd memento-front
-npm i styled-components reflexbox
+npm i styled-components rebass
 
 cd ..
 ```
