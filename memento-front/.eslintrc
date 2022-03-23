@@ -11,7 +11,9 @@
     ],
     "rules": {
         "semi": "error",
-        "quotes": "error"
+        "quotes": "error",
+        "@typescript-eslint/no-empty-interface": "off",
+        "@typescript-eslint/ban-types": "off"
     }
 }
   

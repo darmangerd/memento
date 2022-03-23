@@ -1,12 +1,14 @@
 import React from "react";
-import MButton from "./components/MButton/MButton";
-import LearnComponent from "./LearnComponent";
+import MButton from "./components/MButton";
+import MInputText from "./components/MInputText";
+import MWordListItem from "./components/MWordListItem";
 
 function App() {
   return (
     <div>
-      <LearnComponent/>
-      <MButton />
+      <MButton>Text</MButton>
+      <MInputText placeholder="salut" />
+      <MWordListItem title="English BEC 1" author="owen" status="green" />
     </div>
   );
 }
