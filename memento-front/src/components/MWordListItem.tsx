@@ -18,12 +18,18 @@ function MWordListItem(props: Props) {
   }
 
   return (
+    <Flex
+      width={[1, 1/2, 1/2, 1/3, 1/3]}
+      px={30}
+      py={15}
+    >
       <Flex
         css={{borderRadius: "15px"}}
         backgroundColor={GREY_COLOR}
         justifyContent="space-between"
         px={30}
         py={15}
+        width={1}
       >
           <Flex
             flexDirection="column"
@@ -42,6 +48,7 @@ function MWordListItem(props: Props) {
               />
           </Flex>
       </Flex>
+    </Flex>
   );
 }
 
