@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\MList;
+use http\Env\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class MListController extends Controller
 {
@@ -18,24 +20,51 @@ class MListController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        //
+        $words = $request->get("words");
+        $words = array_reduce($words, function ($prev, $item) {
+            if (!empty($item[0]) && !empty($item[1])) {
+                $prev[] = $item;
+            }
+            return $prev;
+        }, []);
+
+        $validator = Validator::make([
+            ...$request->all(),
+            'words' => $words
+        ], [
+            'name' => ['required', 'min:5', 'max:25'],
+            'words' => ['required', "array", "between:5,500"],
+            'lang_source' => ['required', 'exists:languages,id'],
+            'lang_def' => ['required', 'exists:languages,id']
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "errors" => $validator->errors()
+            ], 400);
+        }
+
+        $name = $request->get("name");
+        $lang_source = $request->get("lang_source");
+        $lang_def = $request->get("lang_def");
+
+        $list = new MList;
+
+        $list->name = $name;
+        $list->words = json_encode($words);
+        $list->lang_source = $lang_source;
+        $list->lang_def = $lang_def;
+
+        $list->save();
+
+        return $list;
     }
 
     /**

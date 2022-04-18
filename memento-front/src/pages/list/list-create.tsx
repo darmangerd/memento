@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useState} from "react";
 import { Flex } from "rebass";
 import MInputText from "../../components/MInputText";
-import {List} from "../../models/List";
+import {List} from "../../types/List";
 import {ListController} from "../../controllers/ListController";
 import {useAppSelector} from "../../store/hooks";
 import {selectLanguages} from "../../store/stores/LangagesStore";
@@ -9,14 +9,34 @@ import MDropdown from "../../components/MDropdown";
 import MTitle from "../../components/MTitle";
 import MButton from "../../components/MButton";
 import MLabel from "../../components/MLabel";
-import {GREY_COLOR, RED_COLOR} from "../../constants/style";
+import {RED_COLOR} from "../../constants/style";
+import {ErrorBuilder} from "../../classes/ErrorBuilder";
+import MDescription from "../../components/MDescription";
+import {useNavigate} from "react-router-dom";
 
 function ListCreate() {
+    const navigate = useNavigate();
+
     const languages = useAppSelector(selectLanguages);
+
+    const [error, setError] = useState<ErrorBuilder<keyof List>>();
+
     const [list, setList] = useState<Partial<List>>({
         name: "",
-        words: [["", ""]]
+        words: [["", ""]],
+        lang_source: 0,
+        lang_def: 0,
     });
+
+    useMemo(() => {
+        if (languages.length > 0) {
+            setList((state) => ({
+                ...state,
+                lang_source: languages[0].id,
+                lang_def: languages[0].id,
+            }));
+        }
+    }, [languages]);
 
     function setLanguages(languageID: number, destination: "def" | "source") {
         setList({
@@ -85,25 +105,34 @@ function ListCreate() {
     }
 
     async function publish() {
-        console.log(list);
+        try {
+            await ListController.postList(list);
+            setError(undefined);
+            navigate("/");
+        } catch (err: any) {
+            setError(err);
+        }
     }
 
     return (
         <Flex px={5} py={4} flexDirection="column">
+            {JSON.stringify(list)}
             <MTitle>Create List</MTitle>
 
             <Flex py={4} flexDirection="column">
                 <MLabel htmlFor="list-name">List name</MLabel>
                 <MInputText
+                    error={!!error?.pick("name")}
                     id="list-name"
                     placeholder="FCE vocabulary 1"
                     onChange={({ target: { value } }) => setName(value)}
                 />
+                <MDescription color={RED_COLOR}>{error?.pick("name").join(" ")}</MDescription>
             </Flex>
 
             <Flex flexDirection="column">
                 <Flex width="100%" py={4}>
-                    <Flex width={9/10}>
+                    <Flex width={8/10}>
                         <Flex pr={3} flexDirection="column" width={1/2}>
                             <MLabel className="label-input" htmlFor="lang-source" >Language source</MLabel>
                             <MDropdown
@@ -124,13 +153,13 @@ function ListCreate() {
                             />
                         </Flex>
                     </Flex>
-                    <Flex width={1/10} />
+                    <Flex width={2/10} />
                 </Flex>
                 <Flex flexDirection="column">
                     {
                         list.words?.map((wordDef, index) => (
                             <Flex key={index}>
-                                <Flex width={9/10}>
+                                <Flex width={8/10}>
                                     <Flex pr={3} width={1/2}>
                                         <MInputText
                                             id="list-name"
@@ -148,7 +177,7 @@ function ListCreate() {
                                         />
                                     </Flex>
                                 </Flex>
-                                <Flex pl={3} width={1/10}>
+                                <Flex pl={3} width={2/10}>
                                     <MButton onClick={() => deleteWord(index)} background={RED_COLOR} width="100%">delete</MButton>
                                 </Flex>
                             </Flex>
@@ -158,6 +187,21 @@ function ListCreate() {
                 <Flex pt={3}>
                     <MButton disabled={!canAddWord} onClick={addWord} width="100%">Add a word</MButton>
                 </Flex>
+            </Flex>
+            <Flex pt={2} justifyContent="center" alignItems="center" color={RED_COLOR} flexDirection="column">
+                {
+                    error &&
+                    error.without<"name">("name").iterable.map(([key, value]) => (
+                        <Flex>
+                            <span>{key}:&nbsp;</span>
+                            {
+                                value.map((v) => (
+                                  <span>{v}</span>
+                                ))
+                            }
+                        </Flex>
+                    ))
+                }
             </Flex>
             <Flex width={1} justifyContent="center" alignItems="center" pt={5}>
                 <MButton onClick={publish}>Publish</MButton>

@@ -11,6 +11,9 @@ class MList extends Model
 
     protected $table = 'lists';
 
+    const CREATED_AT = 'creation_date';
+    const UPDATED_AT = 'updated_date';
+
     /**
      * The attributes that are mass assignable.
      *

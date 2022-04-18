@@ -16,6 +16,10 @@ use App\Http\Controllers\LanguageController;
 |
 */
 
+
 Route::get('/lists', [MListController::class, 'index']);
+Route::post('/list', [MListController::class, 'store']);
+
 Route::get('/users', [UserController::class, 'index']);
+
 Route::get('/languages', [LanguageController::class, 'index']);

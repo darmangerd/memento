@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { LanguagesController } from "../../controllers/LanguagesController";
-import { Language } from "../../models/Language";
+import { Language } from "../../types/Language";
 
 export interface LanguagesState {
     languages: Language[];

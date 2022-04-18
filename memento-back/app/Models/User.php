@@ -12,6 +12,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    const CREATED_AT = 'creation_date';
+    const UPDATED_AT = 'updated_date';
+
     /**
      * The attributes that are mass assignable.
      *

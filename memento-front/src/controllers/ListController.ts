@@ -1,8 +1,12 @@
 import { APIController } from "./APIController";
+import {List} from "../types/List";
 
 export class ListController extends APIController {
     static async getAllLists() {
-        const res = await fetch(APIController.getURL("lists"));
-        return res.json();
+        return await APIController.get<List[]>("lists");
+    }
+
+    static async postList(list: Partial<List>) {
+        return APIController.post<Partial<List>, keyof List>(list, "list");
     }
 }

@@ -4,7 +4,7 @@ import MTitle from "../components/MTitle";
 import MWordList from "../components/MWordList";
 import MWordListItem from "../components/MWordListItem";
 import {ListController} from "../controllers/ListController";
-import {List} from "../models/List";
+import {List} from "../types/List";
 
 function IndexPage() {
     const [list, setLists] = useState<List[]>([]);
