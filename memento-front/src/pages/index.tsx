@@ -10,7 +10,7 @@ function IndexPage() {
     const [list, setLists] = useState<List[]>([]);
 
     useEffect(() => {
-        ListController.getLists().then(setLists);
+        ListController.getAllLists().then(setLists);
     }, []);
 
     return (

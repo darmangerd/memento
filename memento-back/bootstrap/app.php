@@ -52,15 +52,9 @@ $app->singleton(
 |
 */
 
-<<<<<<< HEAD
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
 ], function ($router) {
-    require __DIR__.'/../routes/web.php';
-    require __DIR__.'/../routes/user.php';
-    require __DIR__.'/../routes/list.php';
 });
 
-=======
->>>>>>> ed1e9131ecba13fbd36bfbef34518ba164d72743
 return $app;

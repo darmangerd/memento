@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use \App\Http\Controllers\UserController;
-use \App\Http\Controllers\MListController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\MListController;
+use App\Http\Controllers\LanguageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,5 +16,6 @@ use \App\Http\Controllers\MListController;
 |
 */
 
-Route::get('/user', [UserController::class, 'index']);
 Route::get('/lists', [MListController::class, 'index']);
+Route::get('/users', [UserController::class, 'index']);
+Route::get('/languages', [LanguageController::class, 'index']);

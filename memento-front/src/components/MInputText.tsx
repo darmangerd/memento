@@ -8,7 +8,7 @@ const MInputText = styled.input({
     borderRadius: "15px",
     padding: "10px 20px",
     outline: "none",
-    maxWidth: "550px",
+    width: "100%",
 
     ":focus": {
       borderColor: PRIMARY_COLOR
