@@ -2,31 +2,32 @@ import React, {useEffect, useState} from "react";
 import { Flex } from "rebass";
 import MTitle from "../components/MTitle";
 import MWordList from "../components/MWordList";
-import MWordListItem from "../components/MWordListItem";
 import {ListController} from "../controllers/ListController";
 import {List} from "../types/List";
+import DefaultLayout from "../layouts/DefaultLayout";
 
 function IndexPage() {
-    const [list, setLists] = useState<List[]>([]);
+    const [lists, setLists] = useState<List[]>([]);
 
     useEffect(() => {
         ListController.getAllLists().then(setLists);
     }, []);
 
+    const listComponent = <>
+        <MTitle>Your lists</MTitle>
+        <MWordList lists={lists} />
+    </>;
+
+    const emptyList = <>
+        <MTitle>You don't have any lists</MTitle>
+    </>;
+
     return (
-        <Flex
-            flexDirection="column"
-            p={30}
-        >
-            <MTitle>Vos Listes</MTitle>
-            <MWordList>
-                {
-                    list.map(l => (
-                        <MWordListItem title={l.name} author={l.creator.login} status="green" />
-                    ))
-                }
-            </MWordList>
-        </Flex>
+        <DefaultLayout>
+            {
+                lists.length > 0 ? listComponent : emptyList
+            }
+        </DefaultLayout>
     );
 }
 

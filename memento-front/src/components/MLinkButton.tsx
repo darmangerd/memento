@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import {ButtonComponent} from "./ButtonComponent";
 
-const MButton = styled.button(ButtonComponent);
+const MLinkButton = styled.a(ButtonComponent);
 
-export default MButton;
+export default MLinkButton;
