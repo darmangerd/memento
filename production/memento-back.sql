@@ -38,7 +38,7 @@ CREATE TABLE `languages` (
 
 LOCK TABLES `languages` WRITE;
 /*!40000 ALTER TABLE `languages` DISABLE KEYS */;
-INSERT INTO `languages` VALUES (1,'Français','fr',NULL,NULL),(2,'English','en',NULL,NULL),(3,'German',NULL,NULL,NULL);
+INSERT INTO `languages` VALUES (1,'Français','fr',NULL,NULL),(2,'English','en',NULL,NULL),(3,'German','de',NULL,NULL);
 /*!40000 ALTER TABLE `languages` ENABLE KEYS */;
 UNLOCK TABLES;
 
