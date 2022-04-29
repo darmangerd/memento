@@ -58,5 +58,4 @@ networks:
 
 volumes:
     memento-mysql:
-        driver: local
     memento:
