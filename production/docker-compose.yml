@@ -15,8 +15,8 @@ services:
             - ./memento-back.sql:/docker-entrypoint-initdb.d/init.sql
         networks:
             - memento-network
-        expose:
-          - '3306'
+        ports:
+          - 3306:3308
         healthcheck:
             test: [
                 'CMD',
