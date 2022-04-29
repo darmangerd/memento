@@ -7,3 +7,4 @@ FROM nginx:stable-alpine
 COPY memento-back /memento/back
 COPY --from=builder /build /memento/front/
 RUN chmod -Rf 777 /memento/back
+EXPOSE 80
