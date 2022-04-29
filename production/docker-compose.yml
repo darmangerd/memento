@@ -16,7 +16,7 @@ services:
         networks:
             - memento-network
         ports:
-          - 3306:3308
+          - 3308:3306
         healthcheck:
             test: [
                 'CMD',
