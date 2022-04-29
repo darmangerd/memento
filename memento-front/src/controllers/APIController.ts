@@ -2,7 +2,7 @@ import {ErrorBuilder} from "../classes/ErrorBuilder";
 import {ErrorResponse} from "../types/ErrorResponse";
 
 export class APIController {
-    static baseURL = process.env.NODE_ENV === "production" ? "http://memento-api.owencalvin.com/api/" : "http://localhost/api/";
+    static baseURL = process.env.NODE_ENV === "production" ? "http://memento-api.owencalvin.com:8080/api/" : "http://localhost/api/";
 
     static getURL(...url: string[]) {
         return `${APIController.baseURL}${url.join("/")}`;
