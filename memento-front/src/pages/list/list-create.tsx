@@ -127,7 +127,7 @@ function ListCreate() {
                     placeholder="FCE vocabulary 1"
                     onChange={({ target: { value } }) => setName(value)}
                 />
-                <MDescription color={RED_COLOR}>{error?.pick("name").join(" ")}</MDescription>
+                <MDescription color={RED_COLOR}>{error?.pick("name")?.join(" ")}</MDescription>
             </Flex>
 
             <Flex flexDirection="column">

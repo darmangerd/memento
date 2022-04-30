@@ -7,7 +7,7 @@ export class ErrorBuilder<Keys extends keyof any> {
         this.errors = errors;
     }
 
-    pick(key: Keys) {
+    pick(key: Keys): string[] | undefined {
         return this.errors[key] as string[];
     }
 
