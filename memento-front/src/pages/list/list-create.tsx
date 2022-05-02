@@ -89,9 +89,8 @@ function ListCreate() {
 
     function deleteWord(index: number) {
         setList((state) => {
-            let words = [...(state.words || [])];
-            words = words.slice(index, -1);
-            console.log(words);
+            const words = [...(state.words || [])];
+            words.splice(index, 1);
 
             if (words.length <= 0) {
                 words.push(["", ""]);
