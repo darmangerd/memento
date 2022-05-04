@@ -17,8 +17,9 @@ use App\Http\Controllers\LanguageController;
 */
 
 
-Route::get('/lists', [MListController::class, 'index']);
 Route::post('/list', [MListController::class, 'store']);
+Route::get('/list', [MListController::class, 'index']);
+Route::get('/list/{id}', [MListController::class, 'one']);
 
 Route::get('/users', [UserController::class, 'index']);
 

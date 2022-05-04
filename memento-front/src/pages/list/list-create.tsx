@@ -1,5 +1,5 @@
-import React, {useEffect, useMemo, useState} from "react";
-import { Flex } from "rebass";
+import React, {useMemo, useState} from "react";
+import {Flex} from "rebass";
 import MInputText from "../../components/MInputText";
 import {List} from "../../types/List";
 import {ListController} from "../../controllers/ListController";
@@ -124,16 +124,16 @@ function ListCreate() {
                     error={!!error?.pick("name")}
                     id="list-name"
                     placeholder="FCE vocabulary 1"
-                    onChange={({ target: { value } }) => setName(value)}
+                    onChange={({target: {value}}) => setName(value)}
                 />
                 <MDescription color={RED_COLOR}>{error?.pick("name")?.join(" ")}</MDescription>
             </Flex>
 
             <Flex flexDirection="column">
                 <Flex width="100%" py={4}>
-                    <Flex width={8/10}>
-                        <Flex pr={3} flexDirection="column" width={1/2}>
-                            <MLabel className="label-input" htmlFor="lang-source" >Language source</MLabel>
+                    <Flex width={8 / 10}>
+                        <Flex pr={3} flexDirection="column" width={1 / 2}>
+                            <MLabel className="label-input" htmlFor="lang-source">Language source</MLabel>
                             <MDropdown
                                 text={(option) => `${option.abbr} (${option.lang})`}
                                 onChange={(value) => setLanguages(value.id, "source")}
@@ -142,8 +142,8 @@ function ListCreate() {
                             />
                         </Flex>
 
-                        <Flex pl={3} flexDirection="column" width={1/2}>
-                            <MLabel className="label-input" htmlFor="lang-definition" >Language definition</MLabel>
+                        <Flex pl={3} flexDirection="column" width={1 / 2}>
+                            <MLabel className="label-input" htmlFor="lang-definition">Language definition</MLabel>
                             <MDropdown
                                 text={(option) => `${option.abbr} (${option.lang})`}
                                 onChange={(value) => setLanguages(value.id, "def")}
@@ -152,32 +152,33 @@ function ListCreate() {
                             />
                         </Flex>
                     </Flex>
-                    <Flex width={2/10} />
+                    <Flex width={2 / 10}/>
                 </Flex>
                 <Flex flexDirection="column">
                     {
                         list.words?.map((wordDef, index) => (
                             <Flex key={index}>
-                                <Flex width={8/10}>
-                                    <Flex pr={3} width={1/2}>
+                                <Flex width={8 / 10}>
+                                    <Flex pr={3} width={1 / 2}>
                                         <MInputText
                                             id="list-name"
                                             placeholder="..."
                                             value={wordDef[0]}
-                                            onChange={({ target: { value } }) => setWord(value, index, 0)}
+                                            onChange={({target: {value}}) => setWord(value, index, 0)}
                                         />
                                     </Flex>
-                                    <Flex pl={3} width={1/2}>
+                                    <Flex pl={3} width={1 / 2}>
                                         <MInputText
                                             id="list-name"
                                             placeholder="..."
                                             value={wordDef[1]}
-                                            onChange={({ target: { value } }) => setWord(value, index, 1)}
+                                            onChange={({target: {value}}) => setWord(value, index, 1)}
                                         />
                                     </Flex>
                                 </Flex>
-                                <Flex pl={3} width={2/10}>
-                                    <MButton onClick={() => deleteWord(index)} background={RED_COLOR} width="100%">delete</MButton>
+                                <Flex pl={3} width={2 / 10}>
+                                    <MButton onClick={() => deleteWord(index)} background={RED_COLOR}
+                                             width="100%">delete</MButton>
                                 </Flex>
                             </Flex>
                         ))
@@ -195,7 +196,7 @@ function ListCreate() {
                             <span>{key}:&nbsp;</span>
                             {
                                 value.map((v) => (
-                                  <span>{v}</span>
+                                    <span>{v}</span>
                                 ))
                             }
                         </Flex>

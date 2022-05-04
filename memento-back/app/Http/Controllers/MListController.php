@@ -19,6 +19,10 @@ class MListController extends Controller
         return MList::all();
     }
 
+    public function one($id) {
+        return MList::find($id);
+    }
+
     /**
      * Store a newly created resource in storage.
      *

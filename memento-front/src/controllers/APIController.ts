@@ -4,11 +4,11 @@ import {ErrorResponse} from "../types/ErrorResponse";
 export class APIController {
     static baseURL = process.env.NODE_ENV === "production" ? "http://memento-api.owencalvin.com:8080/api/" : "http://localhost/api/";
 
-    static getURL(...url: string[]) {
+    static getURL(...url: (string | number)[]) {
         return `${APIController.baseURL}${url.join("/")}`;
     }
 
-    static async makeRequest<ResponseType = any, Errors extends keyof any = any>(init?: RequestInit, ...url: string[]) {
+    static async makeRequest<ResponseType = any, Errors extends keyof any = any>(init?: RequestInit, ...url: (string | number)[]) {
         const res = await fetch(
             APIController.getURL(...url),
             init
@@ -20,14 +20,14 @@ export class APIController {
             throw new ErrorBuilder(dataErrors.errors);
         }
 
-        return data;
+        return data as ResponseType;
     }
 
-    static async get<ResponseType = any, Errors extends keyof any = any>(...url: string[]) {
+    static async get<ResponseType = any, Errors extends keyof any = any>(...url: (string | number)[]) {
         return this.makeRequest<ResponseType, Errors>({}, ...url);
     }
 
-    static async post<DataType, ResponseType = any, Errors extends keyof any = any>(datas: DataType, ...url: string[]) {
+    static async post<DataType, ResponseType = any, Errors extends keyof any = any>(datas: DataType, ...url: (string | number)[]) {
         return this.makeRequest<ResponseType, Errors>(
             {
                 method: "POST",
