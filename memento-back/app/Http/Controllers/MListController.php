@@ -20,7 +20,7 @@ class MListController extends Controller
     }
 
     public function one($id) {
-        return MList::find($id);
+        return MList::with(['creator', 'lang_source', 'lang_def'])->find($id);
     }
 
     /**
@@ -43,8 +43,8 @@ class MListController extends Controller
             ...$request->all(),
             'words' => $words
         ], [
-            'name' => ['required', 'min:5', 'max:25'],
-            'words' => ['required', "array", "between:5,500"],
+            'name' => ['required', 'min:3', 'max:25'],
+            'words' => ['required', "array", "between:3,500"],
             'lang_source' => ['required', 'exists:languages,id'],
             'lang_def' => ['required', 'exists:languages,id']
         ]);

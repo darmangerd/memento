@@ -5,6 +5,10 @@ import {selectLanguages} from "../../store/stores/LangagesStore";
 import {List} from "../../types/List";
 import {ListController} from "../../controllers/ListController";
 import {useParams} from "react-router-dom";
+import MTitle from "../../components/MTitle";
+import MEditableCard from "../../components/MEditableCard";
+import {Language} from "../../types/Language";
+import MCard from "../../components/Card";
 
 function ListView() {
     const [list, setList] = useState<List | undefined>(undefined);
@@ -20,9 +24,24 @@ function ListView() {
         getList();
     }, []);
 
+    if (!list) {
+        return <Flex></Flex>;
+    }
+
     return (
-        <Flex>
-            {JSON.stringify(list)}
+        <Flex my={3} flexDirection="column">
+            <Flex mx={5}>
+                <MTitle>{list?.name}</MTitle>
+            </Flex>
+            <Flex flexDirection="column">
+                {
+                    list?.words.map((word) => (
+                      <Flex my={3} flexDirection="column">
+                          <MCard definitionIndex={1} definitionLanguage={list?.lang_def as Language} words={word} />
+                      </Flex>
+                    ))
+                }
+            </Flex>
         </Flex>
     );
 }

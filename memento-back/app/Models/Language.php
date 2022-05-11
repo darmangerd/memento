@@ -16,5 +16,4 @@ class Language extends Model
         'lang',
         'abbr'
     ];
-
 }

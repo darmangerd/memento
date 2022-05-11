@@ -26,4 +26,20 @@ class MList extends Model
         'lang_source',
         'lang_def',
     ];
+
+    protected $casts = [
+        'words' => 'array',
+    ];
+
+    public function creator() {
+        return $this->belongsTo(User::class, 'creator', 'id');
+    }
+
+    public function lang_source() {
+        return $this->belongsTo(Language::class, 'lang_source', 'id');
+    }
+
+    public function lang_def() {
+        return $this->belongsTo(Language::class, 'lang_def', 'id');
+    }
 }

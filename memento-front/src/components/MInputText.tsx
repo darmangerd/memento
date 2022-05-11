@@ -2,11 +2,12 @@ import styled from "styled-components";
 import {PRIMARY_COLOR, RED_COLOR} from "../constants/style";
 
 interface Props {
+    background?: string;
     error?: boolean;
 }
 
 const MInputText = styled.input((props: Props) => ({
-    background: "rgb(226, 226, 226)",
+    background: props.background || "rgb(226, 226, 226)",
     color: "black",
     border: "4px solid transparent",
     borderRadius: "15px",
