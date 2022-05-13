@@ -1,21 +1,23 @@
-import React, {useEffect, useState} from "react";
-import { Flex } from "rebass";
+import React from "react";
+import {Flex} from "rebass";
 import MTitle from "../components/MTitle";
 import MWordList from "../components/MWordList";
 import {ListController} from "../controllers/ListController";
-import {List} from "../types/List";
 import DefaultLayout from "../layouts/DefaultLayout";
+import MLoader from "../components/MLoader";
+import {useFetch} from "../hooks/useFetch";
+import MLoaderFullPage from "../components/MLoaderFullPage";
 
 function IndexPage() {
-    const [lists, setLists] = useState<List[]>([]);
+    const [isLoading, lists] = useFetch(ListController.getAllLists);
 
-    useEffect(() => {
-        ListController.getAllLists().then(setLists);
-    }, []);
+    if (isLoading) {
+        return <MLoaderFullPage />;
+    }
 
     const listComponent = <>
         <MTitle>Your lists</MTitle>
-        <MWordList lists={lists} />
+        <MWordList lists={lists}/>
     </>;
 
     const emptyList = <>

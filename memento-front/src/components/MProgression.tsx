@@ -8,7 +8,7 @@ interface Props {
 }
 
 const Progression = styled(Flex)({
-    height: 8,
+    height: 5,
     position: "fixed",
     bottom: 0,
     left: 0,

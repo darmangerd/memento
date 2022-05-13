@@ -3,14 +3,27 @@ import {Box, Flex} from "rebass";
 import {GREY_COLOR, PRIMARY_COLOR} from "../constants/style";
 import {List} from "../types/List";
 import {Link} from "react-router-dom";
+import styled from "styled-components";
 
 interface Props {
     list: Partial<List>;
 }
 
+const WordLink = styled(Link)({
+    color: "black",
+    
+    ":focus": {
+        color: "black",
+    },
+
+    ":visited": {
+        color: "black",
+    }
+});
+
 function MWordListItem(props: Props) {
     return (
-        <Link to={`/list/${props.list.id}`}>
+        <WordLink to={`/list/${props.list.id}`}>
             <Flex>
                 <Flex
                     css={{borderRadius: "15px"}}
@@ -38,7 +51,7 @@ function MWordListItem(props: Props) {
                     </Flex>
                 </Flex>
             </Flex>
-        </Link>
+        </WordLink>
     );
 }
 

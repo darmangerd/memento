@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {Box, Flex} from "rebass";
 import {useAppSelector} from "../../store/hooks";
 import {selectLanguages} from "../../store/stores/LangagesStore";
@@ -12,9 +12,11 @@ import MCard from "../../components/MCard";
 import MHeader from "../../components/MHeader";
 import MProgression from "../../components/MProgression";
 import styled from "styled-components";
+import {useFetch} from "../../hooks/useFetch";
+import MLoaderFullPage from "../../components/MLoaderFullPage";
 
 const Shadow = styled(Flex)({
-    height: "20vh",
+    height: "10vh",
     width: "100%",
     position: "fixed",
     bottom: 0,
@@ -26,15 +28,10 @@ const Shadow = styled(Flex)({
 });
 
 function ListView() {
-    const [list, setList] = useState<List | undefined>(undefined);
-    const [progression, setProgression] = useState(0);
-    const languages = useAppSelector(selectLanguages);
     const { id } = useParams();
-
-    async function getList() {
-        const l = await ListController.getList(id as string);
-        setList(l);
-    }
+    const fetchFn = useCallback(() => ListController.getList(id as string), [id]);
+    const [isLoading, list] = useFetch(fetchFn);
+    const [progression, setProgression] = useState(0);
 
     function updateScroll() {
         const scrollY = window.scrollY;
@@ -45,7 +42,6 @@ function ListView() {
     }
 
     useEffect(() => {
-        getList();
         document.addEventListener("scroll", updateScroll);
 
         return () => {
@@ -53,10 +49,9 @@ function ListView() {
         };
     }, []);
 
-    if (!list) {
-        return <Flex></Flex>;
+    if (isLoading) {
+        return <MLoaderFullPage />;
     }
-
 
     return (
         <Box>
