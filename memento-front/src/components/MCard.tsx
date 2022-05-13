@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import React, {useState} from "react";
 import {Flex} from "rebass";
-import {GREY_COLOR} from "../constants/style";
+import {GREY_COLOR, PRIMARY_COLOR} from "../constants/style";
 import MInputText from "./MInputText";
 import MTitle from "./MTitle";
 import {Language} from "../types/Language";
@@ -37,14 +37,12 @@ const Front = styled(Flex)({
     height: "100%",
     top: 0,
     position: "absolute",
-    textAlign: "center",
-    transformStyle: "preserve-3d",
-    backfaceVisibility: "hidden"
+    textAlign: "center"
 });
 
 const Back = styled(Flex)({
     borderRadius: 10,
-    background: "black",
+    background: PRIMARY_COLOR,
     color: "white",
     top: 0,
     left: 0,
@@ -52,9 +50,7 @@ const Back = styled(Flex)({
     width: "100%",
     position: "absolute",
     textAlign: "center",
-    transform: "translate3d(0, 0, -1px) rotateX(-180deg)",
-    transformStyle: "preserve-3d",
-    backfaceVisibility: "hidden"
+    transform: "translate3d(0, 0, -1px) rotateX(-180deg)"
 });
 
 function MCard(props: Props) {

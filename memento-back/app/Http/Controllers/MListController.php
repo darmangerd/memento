@@ -62,7 +62,7 @@ class MListController extends Controller
         $list = new MList;
 
         $list->name = $name;
-        $list->words = json_encode($words);
+        $list->words = $words;
         $list->lang_source = $lang_source;
         $list->lang_def = $lang_def;
 
