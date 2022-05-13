@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React from "react";
-import {Flex} from "rebass";
+import {Box, Flex} from "rebass";
 
 interface Props {
     children?: JSX.Element,
@@ -25,13 +25,16 @@ const Header = styled(Flex)({
 
 function MHeader(props: Props) {
     return (
-        <HeaderWrapper minHeight={props.minHeight}>
-            <Header my={2} mx={3} flex={1}>
-                <Flex flex={1} alignItems="center">
-                    {props.children}
-                </Flex>
-            </Header>
-        </HeaderWrapper>
+        <Box>
+            <HeaderWrapper minHeight={props.minHeight}>
+                <Header my={2} mx={3} flex={1}>
+                    <Flex flex={1} alignItems="center">
+                        {props.children}
+                    </Flex>
+                </Header>
+            </HeaderWrapper>
+            <Box mb={(props.minHeight || 0) + 5}/>
+        </Box>
     );
 }
 
