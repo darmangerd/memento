@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import React, {useState} from "react";
+import React from "react";
 import {Flex} from "rebass";
 import {GREY_COLOR, PRIMARY_COLOR} from "../constants/style";
-import MInputText from "./MInputText";
 import MTitle from "./MTitle";
 import {Language} from "../types/Language";
 
@@ -10,15 +9,22 @@ interface Props {
     definitionIndex: number;
     definitionLanguage: Language;
     words: string[];
+    height?: string | number;
+    flex?: number;
+    disabled?: boolean;
+    back?: boolean;
+    onClick?: () => any;
 }
 
 interface CardProps {
-    transform?: string
+    transform?: string;
+    height?: string | number;
 }
 
 const Card = styled(Flex)((props: CardProps) => {
     return {
-        height: 300,
+        cursor: "pointer",
+        height: props.height || 300,
         position: "relative",
         background: GREY_COLOR,
         borderRadius: 10,
@@ -54,25 +60,22 @@ const Back = styled(Flex)({
 });
 
 function MCard(props: Props) {
-    const [face, setFace] = useState(0);
-
     let sourceIndex = 0;
     if (props.definitionIndex === 0) {
         sourceIndex = 1;
     }
 
-    function turnCard() {
-        setFace(face === 1 ? 0 : 1);
-    }
-
     return (
-        <Card transform={face === 1 ? "rotateX(180deg)" : ""} onClick={turnCard} px={4} py={4} mx={5} flexDirection="column">
-            <Front alignItems="center" justifyContent="center" flex={1}>
+        <Card flex={props.flex} height={props.height}
+              width="100%"
+              transform={props.back ? "rotateX(180deg)" : ""} onClick={props.onClick}
+              px={4} py={4} mx={5} flexDirection="column">
+            <Front opacity={props.disabled ? 0.5 : 1} alignItems="center" justifyContent="center" flex={1}>
                 <MTitle>
                     {props.words[sourceIndex]}
                 </MTitle>
             </Front>
-            <Back justifyContent="center" alignItems="center" flex={1}>
+            <Back opacity={props.disabled ? 0.5 : 1} justifyContent="center" alignItems="center" flex={1}>
                 <MTitle>
                     {props.words[props.definitionIndex]}
                 </MTitle>

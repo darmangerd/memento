@@ -1,10 +1,9 @@
 import styled from "styled-components";
 import React from "react";
 import {Flex} from "rebass";
-import {PRIMARY_COLOR} from "../constants/style";
 
 interface Props {
-    progression: number;
+    progression?: number;
 }
 
 const Progression = styled(Flex)({
@@ -21,7 +20,7 @@ const Progression = styled(Flex)({
 
 function MProgression(props: Props) {
     return (
-        <Progression width={`${props.progression}%`} />
+        <Progression width={`${(props.progression || 0) * 100}%`} />
     );
 }
 

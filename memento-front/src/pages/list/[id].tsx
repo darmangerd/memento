@@ -1,12 +1,8 @@
-import React, {useCallback, useEffect, useMemo, useState} from "react";
+import React, {useCallback, useMemo, useState} from "react";
 import {Box, Flex} from "rebass";
-import {useAppSelector} from "../../store/hooks";
-import {selectLanguages} from "../../store/stores/LangagesStore";
-import {List} from "../../types/List";
 import {ListController} from "../../controllers/ListController";
 import {useParams} from "react-router-dom";
 import MTitle from "../../components/MTitle";
-import MEditableCard from "../../components/MEditableCard";
 import {Language} from "../../types/Language";
 import MCard from "../../components/MCard";
 import MHeader from "../../components/MHeader";
@@ -14,6 +10,8 @@ import MProgression from "../../components/MProgression";
 import styled from "styled-components";
 import {useFetch} from "../../hooks/useFetch";
 import MLoaderFullPage from "../../components/MLoaderFullPage";
+import MButton from "../../components/MButton";
+import {useKeyboard} from "../../hooks/useKeyboard";
 
 const Shadow = styled(Flex)({
     height: "10vh",
@@ -28,51 +26,90 @@ const Shadow = styled(Flex)({
 });
 
 function ListView() {
-    const { id } = useParams();
+    const {id} = useParams();
     const fetchFn = useCallback(() => ListController.getList(id as string), [id]);
-    const [isLoading, list] = useFetch(fetchFn);
-    const [progression, setProgression] = useState(0);
+    const [isLoading, list, errors] = useFetch(fetchFn);
+    const [currentCardIndex, setCurrentCardIndex] = useState(0);
+    const [back, setBack] = useState(false);
 
-    function updateScroll() {
-        const scrollY = window.scrollY;
-        const fullHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        const percentage = scrollY / fullHeight * 100;
+    const turnCurrentCard = useCallback(() => {
+        setBack(!back);
+    }, [back]);
 
-        setProgression(percentage);
-    }
+    const nextCard = useCallback(() => {
+        if (list && currentCardIndex + 1 < list?.words.length) {
+            setBack(false);
+            setCurrentCardIndex(currentCardIndex + 1);
+        }
+    }, [currentCardIndex, list]);
 
-    useEffect(() => {
-        document.addEventListener("scroll", updateScroll);
+    const previousCard = useCallback(() => {
+        if (currentCardIndex - 1 >= 0) {
+            setBack(false);
+            setCurrentCardIndex(currentCardIndex - 1);
+        }
+    }, [currentCardIndex]);
 
-        return () => {
-            document.removeEventListener("scroll", updateScroll);
-        };
-    }, []);
+    useKeyboard({
+        Space: turnCurrentCard,
+        ArrowRight: nextCard,
+        ArrowLeft: previousCard
+    }, [back, currentCardIndex, list]);
+
+    const progression = useMemo(() => {
+        if (!list?.words.length) return 0;
+
+        return currentCardIndex / (list.words.length - 1);
+    }, [currentCardIndex, isLoading]);
 
     if (isLoading) {
-        return <MLoaderFullPage />;
+        return <MLoaderFullPage/>;
     }
 
     return (
         <Box>
-            <MProgression progression={progression} />
+            <MProgression progression={progression}/>
             <MHeader minHeight={90}>
-                <Flex mx={4}>
+                <Flex flex={1} mx={4} justifyContent="space-between" alignItems="center">
                     <MTitle mb={0}>{list?.name}</MTitle>
+                    <Flex>
+                        {currentCardIndex + 1} / {list.words.length}
+                    </Flex>
                 </Flex>
             </MHeader>
-            <Flex my={3} flexDirection="column">
-                <Flex flexDirection="column">
-                    {
-                        list?.words.map((word, index) => (
-                            <Flex key={index} my={3} flexDirection="column">
-                                <MCard definitionIndex={1} definitionLanguage={list?.lang_def as Language} words={word} />
-                            </Flex>
-                        ))
+            <Flex my={3} width="100%" flex={1}>
+                <Flex width={1 / 5}>
+                    {currentCardIndex - 1 >= 0 &&
+                        <MCard height="calc(100vh - 300px)" definitionIndex={1}
+                               definitionLanguage={list?.lang_def as Language}
+                               words={list?.words[currentCardIndex - 1]} disabled={true}/>
+                    }
+                </Flex>
+                <Flex flex={1} justifyContent="center" alignItems="center" flexDirection="column">
+                    <Flex width="100%">
+                        {
+                            <MCard height="calc(100vh - 300px)" definitionIndex={1}
+                                   definitionLanguage={list?.lang_def as Language}
+                                   back={back}
+                                   words={list?.words[currentCardIndex]} onClick={() => setBack(!back)}/>
+                        }
+                    </Flex>
+                    <Flex>
+                        <MButton disabled={currentCardIndex <= 0}
+                                 onClick={previousCard}>Previous</MButton>
+                        <MButton disabled={currentCardIndex >= list.words.length - 1}
+                                 onClick={nextCard}>Next</MButton>
+                    </Flex>
+                </Flex>
+                <Flex width={1 / 5}>
+                    {currentCardIndex + 1 < list?.words.length &&
+                        <MCard height="calc(100vh - 300px)" definitionIndex={1}
+                               definitionLanguage={list?.lang_def as Language}
+                               words={list?.words[currentCardIndex + 1]} disabled={true}/>
                     }
                 </Flex>
             </Flex>
-            <Shadow />
+            <Shadow/>
         </Box>
     );
 }
