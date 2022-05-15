@@ -18,7 +18,6 @@ function IndexPage() {
     const listComponent = <>
         <MTitle>Your lists</MTitle>
         <MWordList lists={lists}/>
-        <MLoader/>
     </>;
 
     const emptyList = <>

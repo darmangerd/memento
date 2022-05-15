@@ -19,14 +19,16 @@ interface Props {
 interface CardProps {
     transform?: string;
     height?: string | number;
+    disabled?: boolean;
 }
 
 const Card = styled(Flex)((props: CardProps) => {
     return {
         cursor: "pointer",
         height: props.height || 300,
+        minHeight: 300,
         position: "relative",
-        background: GREY_COLOR,
+        background: props.disabled ? "rgb(240, 240, 240)" : GREY_COLOR,
         borderRadius: 10,
         perspectiveOrigin: "center center",
         transformStyle: "preserve-3d",
@@ -66,16 +68,16 @@ function MCard(props: Props) {
     }
 
     return (
-        <Card flex={props.flex} height={props.height}
+        <Card disabled={props.disabled} flex={props.flex} height={props.height}
               width="100%"
               transform={props.back ? "rotateX(180deg)" : ""} onClick={props.onClick}
               px={4} py={4} mx={5} flexDirection="column">
-            <Front opacity={props.disabled ? 0.5 : 1} alignItems="center" justifyContent="center" flex={1}>
+            <Front opacity={props.disabled ? 0.3 : 1} alignItems="center" justifyContent="center" flex={1}>
                 <MTitle>
                     {props.words[sourceIndex]}
                 </MTitle>
             </Front>
-            <Back opacity={props.disabled ? 0.5 : 1} justifyContent="center" alignItems="center" flex={1}>
+            <Back opacity={props.disabled ? 0.3 : 1} justifyContent="center" alignItems="center" flex={1}>
                 <MTitle>
                     {props.words[props.definitionIndex]}
                 </MTitle>

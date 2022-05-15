@@ -115,7 +115,6 @@ function ListCreate() {
 
     return (
         <Flex px={5} py={4} flexDirection="column">
-            {JSON.stringify(list)}
             <MTitle>Create List</MTitle>
 
             <Flex py={4} flexDirection="column">

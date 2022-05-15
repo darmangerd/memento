@@ -10,8 +10,8 @@ import MProgression from "../../components/MProgression";
 import styled from "styled-components";
 import {useFetch} from "../../hooks/useFetch";
 import MLoaderFullPage from "../../components/MLoaderFullPage";
-import MButton from "../../components/MButton";
 import {useKeyboard} from "../../hooks/useKeyboard";
+import {MdOutlineArrowForwardIos, MdOutlineArrowBackIos} from "react-icons/md";
 
 const Shadow = styled(Flex)({
     height: "10vh",
@@ -53,7 +53,9 @@ function ListView() {
     useKeyboard({
         Space: turnCurrentCard,
         ArrowRight: nextCard,
-        ArrowLeft: previousCard
+        ArrowLeft: previousCard,
+        ArrowDown: turnCurrentCard,
+        ArrowUp: turnCurrentCard
     }, [back, currentCardIndex, list]);
 
     const progression = useMemo(() => {
@@ -72,15 +74,12 @@ function ListView() {
             <MHeader minHeight={90}>
                 <Flex flex={1} mx={4} justifyContent="space-between" alignItems="center">
                     <MTitle mb={0}>{list?.name}</MTitle>
-                    <Flex>
-                        {currentCardIndex + 1} / {list.words.length}
-                    </Flex>
                 </Flex>
             </MHeader>
             <Flex my={3} width="100%" flex={1}>
                 <Flex width={1 / 5}>
                     {currentCardIndex - 1 >= 0 &&
-                        <MCard height="calc(100vh - 300px)" definitionIndex={1}
+                        <MCard height="calc(100vh - 190px)" definitionIndex={1}
                                definitionLanguage={list?.lang_def as Language}
                                words={list?.words[currentCardIndex - 1]} disabled={true}/>
                     }
@@ -88,28 +87,36 @@ function ListView() {
                 <Flex flex={1} justifyContent="center" alignItems="center" flexDirection="column">
                     <Flex width="100%">
                         {
-                            <MCard height="calc(100vh - 300px)" definitionIndex={1}
+                            <MCard height="calc(100vh - 190px)" definitionIndex={1}
                                    definitionLanguage={list?.lang_def as Language}
                                    back={back}
                                    words={list?.words[currentCardIndex]} onClick={() => setBack(!back)}/>
                         }
                     </Flex>
-                    <Flex>
-                        <MButton disabled={currentCardIndex <= 0}
-                                 onClick={previousCard}>Previous</MButton>
-                        <MButton disabled={currentCardIndex >= list.words.length - 1}
-                                 onClick={nextCard}>Next</MButton>
+                    <Flex mt={4}>
+                        <button disabled={currentCardIndex <= 0}
+                                onClick={previousCard}>
+                            <MdOutlineArrowBackIos/>
+                        </button>
+                        <Flex mx={4} opacity={0.8}>
+                            {currentCardIndex + 1} / {list.words.length}
+                        </Flex>
+                        <button disabled={currentCardIndex >= list.words.length - 1}
+                                onClick={nextCard}>
+                            <MdOutlineArrowForwardIos/>
+                        </button>
+
                     </Flex>
                 </Flex>
                 <Flex width={1 / 5}>
                     {currentCardIndex + 1 < list?.words.length &&
-                        <MCard height="calc(100vh - 300px)" definitionIndex={1}
+                        <MCard height="calc(100vh - 190px)" definitionIndex={1}
                                definitionLanguage={list?.lang_def as Language}
                                words={list?.words[currentCardIndex + 1]} disabled={true}/>
                     }
                 </Flex>
             </Flex>
-            <Shadow/>
+            {/*<Shadow/>*/}
         </Box>
     );
 }
