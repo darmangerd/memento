@@ -1,7 +1,7 @@
 import React, {useCallback, useMemo, useState} from "react";
 import {Box, Flex} from "rebass";
 import {ListController} from "../../controllers/ListController";
-import {useParams} from "react-router-dom";
+import {useParams, useNavigate} from "react-router-dom";
 import MTitle from "../../components/MTitle";
 import {Language} from "../../types/Language";
 import MCard from "../../components/MCard";
@@ -11,7 +11,7 @@ import styled from "styled-components";
 import {useFetch} from "../../hooks/useFetch";
 import MLoaderFullPage from "../../components/MLoaderFullPage";
 import {useKeyboard} from "../../hooks/useKeyboard";
-import {MdOutlineArrowForwardIos, MdOutlineArrowBackIos} from "react-icons/md";
+import {MdOutlineArrowBackIos, MdOutlineArrowForwardIos} from "react-icons/md";
 
 const Shadow = styled(Flex)({
     height: "10vh",
@@ -31,6 +31,7 @@ function ListView() {
     const [isLoading, list, errors] = useFetch(fetchFn);
     const [currentCardIndex, setCurrentCardIndex] = useState(0);
     const [back, setBack] = useState(false);
+    const navigate = useNavigate();
 
     const turnCurrentCard = useCallback(() => {
         setBack(!back);
@@ -73,10 +74,14 @@ function ListView() {
             <MProgression progression={progression}/>
             <MHeader minHeight={90}>
                 <Flex flex={1} mx={4} justifyContent="space-between" alignItems="center">
+                    <button onClick={() => navigate(-1)}>
+                        <MdOutlineArrowBackIos />
+                    </button>
                     <MTitle mb={0}>{list?.name}</MTitle>
+                    <Flex />
                 </Flex>
             </MHeader>
-            <Flex my={3} width="100%" flex={1}>
+            <Flex px={3} justifyContent="space-between" my={3} width="100%" flex={1}>
                 <Flex width={1 / 5}>
                     {currentCardIndex - 1 >= 0 &&
                         <MCard height="calc(100vh - 190px)" definitionIndex={1}
@@ -84,7 +89,7 @@ function ListView() {
                                words={list?.words[currentCardIndex - 1]} disabled={true}/>
                     }
                 </Flex>
-                <Flex flex={1} justifyContent="center" alignItems="center" flexDirection="column">
+                <Flex mx={4} flex={1} justifyContent="center" alignItems="center" flexDirection="column">
                     <Flex width="100%">
                         {
                             <MCard height="calc(100vh - 190px)" definitionIndex={1}

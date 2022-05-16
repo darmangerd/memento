@@ -71,7 +71,7 @@ function MCard(props: Props) {
         <Card disabled={props.disabled} flex={props.flex} height={props.height}
               width="100%"
               transform={props.back ? "rotateX(180deg)" : ""} onClick={props.onClick}
-              px={4} py={4} mx={5} flexDirection="column">
+              py={4} flexDirection="column">
             <Front opacity={props.disabled ? 0.3 : 1} alignItems="center" justifyContent="center" flex={1}>
                 <MTitle>
                     {props.words[sourceIndex]}
