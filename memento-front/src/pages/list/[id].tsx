@@ -15,6 +15,7 @@ import {MdOutlineArrowBackIos, MdOutlineArrowForwardIos} from "react-icons/md";
 import MEditableCard from "../../components/MEditableCard";
 import {useTimer} from "../../hooks/useTimer";
 import {Utils} from "../../classes/Utils";
+import MSwitch from "../../components/MSwitch";
 
 const Shadow = styled(Flex)({
     height: "10vh",
@@ -68,13 +69,20 @@ function ListView() {
         ArrowDown: turnCurrentCard,
         ArrowUp: turnCurrentCard,
         Enter: () => setCardError(true)
-    }, [back, currentCardIndex, list, cardError]);
+    }, [back, currentCardIndex, list, cardError, mode]);
 
     const progression = useMemo(() => {
         if (!list?.words.length) return 0;
 
         return currentCardIndex / (list.words.length - 1);
     }, [currentCardIndex, isLoading]);
+
+    const changeMode = (mode: "card" | "write") => {
+        setBack(false);
+        setCardError(false);
+        setCurrentCardIndex(0);
+        setMode(mode);
+    };
 
     const wrapView = useMemo(() => (previous: JSX.Element, current: JSX.Element, next: JSX.Element) => {
         if (!list) return <></>;
@@ -114,32 +122,32 @@ function ListView() {
                 </Flex>
             </Flex>
         );
-    }, [currentCardIndex, list]);
+    }, [currentCardIndex, list, mode]);
 
     const cardView = useMemo(() => wrapView(
-        <MCard height="calc(100vh - 190px)" definitionIndex={1}
+        <MCard height="calc(100vh - 250px)" definitionIndex={1}
                definitionLanguage={list?.lang_def as Language}
                words={list?.words[currentCardIndex - 1]} disabled={true}/>,
-        <MCard height="calc(100vh - 190px)" definitionIndex={1}
+        <MCard height="calc(100vh - 250px)" definitionIndex={1}
                definitionLanguage={list?.lang_def as Language}
                back={back}
                words={list?.words[currentCardIndex]} onClick={() => setBack(!back)}/>,
-        <MCard height="calc(100vh - 190px)" definitionIndex={1}
+        <MCard height="calc(100vh - 250px)" definitionIndex={1}
                definitionLanguage={list?.lang_def as Language}
                words={list?.words[currentCardIndex + 1]} disabled={true}/>
-    ), [currentCardIndex, list, back]);
+    ), [currentCardIndex, list, back, mode]);
 
     const writeView = useMemo(() => wrapView(
-        <MEditableCard height="calc(100vh - 190px)" definitionIndex={1}
+        <MEditableCard height="calc(100vh - 250px)" definitionIndex={1}
                        definitionLanguage={list?.lang_def as Language}
                        words={list?.words[currentCardIndex - 1]} disabled={true} status="success"/>,
-        <MEditableCard height="calc(100vh - 190px)" definitionIndex={1}
+        <MEditableCard height="calc(100vh - 250px)" definitionIndex={1}
                        definitionLanguage={list?.lang_def as Language}
                        words={list?.words[currentCardIndex]} onMatch={nextCard} status={cardError ? "error" : "idle"}/>,
-        <MEditableCard height="calc(100vh - 190px)" definitionIndex={1}
+        <MEditableCard height="calc(100vh - 250px)" definitionIndex={1}
                        definitionLanguage={list?.lang_def as Language}
                        words={list?.words[currentCardIndex + 1]} disabled={true} status="idle"/>
-    ), [currentCardIndex, list, back, cardError]);
+    ), [currentCardIndex, list, back, cardError, mode]);
 
     const getView = useMemo(() => {
         switch (mode) {
@@ -159,13 +167,27 @@ function ListView() {
             <MProgression progression={progression}/>
             <MHeader minHeight={90}>
                 <Flex flex={1} mx={4} justifyContent="space-between" alignItems="center">
-                    <button onClick={() => navigate(-1)}>
-                        <MdOutlineArrowBackIos/>
-                    </button>
+                    <Flex minWidth={200}>
+                        <button onClick={() => navigate(-1)}>
+                            <MdOutlineArrowBackIos/>
+                        </button>
+                    </Flex>
                     <MTitle mb={0}>{list?.name}</MTitle>
-                    <Flex fontFamily="Roboto Mono" opacity={0.3}>{Utils.secondsToDate(time)}</Flex>
+                    <Flex justifyContent="flex-end" textAlign="right" minWidth={200} fontFamily="Roboto Mono"
+                          opacity={0.3}>
+                        {Utils.secondsToDate(time)}
+                    </Flex>
                 </Flex>
             </MHeader>
+            <Flex justifyContent="center">
+                <MSwitch
+                    selected={mode}
+                    getText={(o) => o[0]}
+                    getValue={(o) => o[1]}
+                    onChange={(v: string) => changeMode(v as any)}
+                    options={[["Cards", "card"], ["Writing", "write"]]}
+                />
+            </Flex>
             {getView}
             {/*<Shadow/>*/}
         </Box>
