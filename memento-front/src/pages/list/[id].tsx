@@ -38,7 +38,7 @@ function ListView() {
     const [cardError, setCardError] = useState(false);
     const [mode, setMode] = useState<"card" | "write">("write");
     const navigate = useNavigate();
-    const time = useTimer();
+    const [time, resetTime] = useTimer();
 
     const turnCurrentCard = useCallback(() => {
         setBack(!back);
@@ -81,6 +81,7 @@ function ListView() {
         setBack(false);
         setCardError(false);
         setCurrentCardIndex(0);
+        resetTime();
         setMode(mode);
     };
 

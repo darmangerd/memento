@@ -76,7 +76,7 @@ function MEditableCard(props: Props) {
     useEffect(() => {
         props.onChange?.(text);
 
-        const source = props.words?.[sourceIndex].toLocaleLowerCase().trim();
+        const source = props.words?.[props.definitionIndex].toLocaleLowerCase().trim();
         const def = text.toLocaleLowerCase().trim();
 
         if (def === source) {
