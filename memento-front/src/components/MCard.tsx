@@ -28,7 +28,7 @@ const Card = styled(Flex)((props: CardProps) => {
         height: props.height || 300,
         minHeight: 300,
         position: "relative",
-        background: props.disabled ? "rgb(240, 240, 240)" : GREY_COLOR,
+        background: props.disabled ? "rgb(250, 250, 250)" : "rgb(240, 240, 240)",
         borderRadius: 10,
         perspectiveOrigin: "center center",
         transformStyle: "preserve-3d",
@@ -65,6 +65,10 @@ function MCard(props: Props) {
     let sourceIndex = 0;
     if (props.definitionIndex === 0) {
         sourceIndex = 1;
+    }
+
+    if (!props.words) {
+        return <></>;
     }
 
     return (
