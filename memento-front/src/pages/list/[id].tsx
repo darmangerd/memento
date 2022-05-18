@@ -13,7 +13,8 @@ import MLoaderFullPage from "../../components/MLoaderFullPage";
 import {useKeyboard} from "../../hooks/useKeyboard";
 import {MdOutlineArrowBackIos, MdOutlineArrowForwardIos} from "react-icons/md";
 import MEditableCard from "../../components/MEditableCard";
-import {PRIMARY_COLOR} from "../../constants/style";
+import {useTimer} from "../../hooks/useTimer";
+import {Utils} from "../../classes/Utils";
 
 const Shadow = styled(Flex)({
     height: "10vh",
@@ -33,8 +34,10 @@ function ListView() {
     const [isLoading, list, errors] = useFetch(fetchFn);
     const [currentCardIndex, setCurrentCardIndex] = useState(0);
     const [back, setBack] = useState(false);
+    const [cardError, setCardError] = useState(false);
     const [mode, setMode] = useState<"card" | "write">("write");
     const navigate = useNavigate();
+    const time = useTimer();
 
     const turnCurrentCard = useCallback(() => {
         setBack(!back);
@@ -43,6 +46,7 @@ function ListView() {
     const nextCard = useCallback(() => {
         if (list && currentCardIndex + 1 < list?.words.length) {
             setBack(false);
+            setCardError(false);
             setCurrentCardIndex(currentCardIndex + 1);
         }
     }, [currentCardIndex, list]);
@@ -50,17 +54,21 @@ function ListView() {
     const previousCard = useCallback(() => {
         if (currentCardIndex - 1 >= 0) {
             setBack(false);
+            setCardError(false);
             setCurrentCardIndex(currentCardIndex - 1);
         }
     }, [currentCardIndex]);
 
     useKeyboard({
         Space: turnCurrentCard,
-        ArrowRight: nextCard,
+        ArrowRight: () => {
+            if (mode !== "write") nextCard();
+        },
         ArrowLeft: previousCard,
         ArrowDown: turnCurrentCard,
-        ArrowUp: turnCurrentCard
-    }, [back, currentCardIndex, list]);
+        ArrowUp: turnCurrentCard,
+        Enter: () => setCardError(true)
+    }, [back, currentCardIndex, list, cardError]);
 
     const progression = useMemo(() => {
         if (!list?.words.length) return 0;
@@ -90,11 +98,13 @@ function ListView() {
                         <Flex mx={4} opacity={0.8}>
                             {currentCardIndex + 1} / {list?.words.length}
                         </Flex>
-                        <button disabled={currentCardIndex >= list?.words.length - 1}
-                                onClick={nextCard}>
-                            <MdOutlineArrowForwardIos/>
-                        </button>
-
+                        {mode === "write" ?
+                            <Flex></Flex> :
+                            <button disabled={currentCardIndex >= list?.words.length - 1}
+                                    onClick={nextCard}>
+                                <MdOutlineArrowForwardIos/>
+                            </button>
+                        }
                     </Flex>
                 </Flex>
                 <Flex width={1 / 5}>
@@ -122,14 +132,14 @@ function ListView() {
     const writeView = useMemo(() => wrapView(
         <MEditableCard height="calc(100vh - 190px)" definitionIndex={1}
                        definitionLanguage={list?.lang_def as Language}
-                       words={list?.words[currentCardIndex - 1]} disabled={true} borderColor={PRIMARY_COLOR}/>,
+                       words={list?.words[currentCardIndex - 1]} disabled={true} status="success"/>,
         <MEditableCard height="calc(100vh - 190px)" definitionIndex={1}
                        definitionLanguage={list?.lang_def as Language}
-                       words={list?.words[currentCardIndex]} onMatch={nextCard}/>,
+                       words={list?.words[currentCardIndex]} onMatch={nextCard} status={cardError ? "error" : "idle"}/>,
         <MEditableCard height="calc(100vh - 190px)" definitionIndex={1}
                        definitionLanguage={list?.lang_def as Language}
-                       words={list?.words[currentCardIndex + 1]} disabled={true}/>
-    ), [currentCardIndex, list, back]);
+                       words={list?.words[currentCardIndex + 1]} disabled={true} status="idle"/>
+    ), [currentCardIndex, list, back, cardError]);
 
     const getView = useMemo(() => {
         switch (mode) {
@@ -138,7 +148,7 @@ function ListView() {
             case "write":
                 return writeView;
         }
-    }, [mode, list, currentCardIndex, back]);
+    }, [mode, list, currentCardIndex, back, cardError]);
 
     if (isLoading) {
         return <MLoaderFullPage/>;
@@ -153,7 +163,7 @@ function ListView() {
                         <MdOutlineArrowBackIos/>
                     </button>
                     <MTitle mb={0}>{list?.name}</MTitle>
-                    <Flex />
+                    <Flex fontFamily="Roboto Mono" opacity={0.3}>{Utils.secondsToDate(time)}</Flex>
                 </Flex>
             </MHeader>
             {getView}

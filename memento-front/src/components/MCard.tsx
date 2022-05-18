@@ -29,7 +29,7 @@ const Card = styled(Flex)((props: CardProps) => {
         minHeight: 300,
         position: "relative",
         background: props.disabled ? "rgb(250, 250, 250)" : "rgb(240, 240, 240)",
-        borderRadius: 10,
+        borderRadius: 15,
         perspectiveOrigin: "center center",
         transformStyle: "preserve-3d",
         transition: "all 0.3s",
@@ -39,7 +39,7 @@ const Card = styled(Flex)((props: CardProps) => {
 });
 
 const Front = styled(Flex)({
-    borderRadius: 10,
+    borderRadius: 15,
     left: 0,
     width: "100%",
     height: "100%",
@@ -49,7 +49,7 @@ const Front = styled(Flex)({
 });
 
 const Back = styled(Flex)({
-    borderRadius: 10,
+    borderRadius: 15,
     background: PRIMARY_COLOR,
     color: "white",
     top: 0,
