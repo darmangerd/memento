@@ -8,7 +8,7 @@ import {GREEN_COLOR, RED_COLOR} from "../constants/style";
 
 interface Props {
     definitionIndex: number;
-    definitionLanguage: Language;
+    definitionLanguage?: Language;
     words?: string[];
     height?: string | number;
     flex?: number;
@@ -84,6 +84,10 @@ function MEditableCard(props: Props) {
         }
     }, [props.words, props.definitionIndex, text]);
 
+    if (!props.definitionLanguage) {
+        return <></>;
+    }
+
     return (
         <Card disabled={props.disabled} flex={props.flex} height={props.height}
               width="100%"
@@ -98,7 +102,7 @@ function MEditableCard(props: Props) {
                     </Flex>
                     {props.status !== "success" ?
                         <MInputText value={text} background={"rgba(0, 0, 0, 0.08)"} onChange={({target}) => setText(target.value)}
-                                    placeholder={`Your answer in "${props.definitionLanguage.lang.toLocaleLowerCase()}"`}/>
+                                    placeholder={`Your answer in "${props.definitionLanguage?.lang.toLocaleLowerCase()}"`}/>
                         :
                         <Flex pb={4} pl={2} width={1}>
                             <MTitle mb={0}>{props.words?.[props.definitionIndex]}</MTitle>

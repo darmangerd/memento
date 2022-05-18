@@ -7,7 +7,7 @@ interface Props<T = string[][], V = string> {
     options?: T[];
     getText?: (a: T) => string;
     getValue?: (a: T) => V;
-    selected?: V;
+    selected?: V | null;
     onChange?: (value: V) => any;
 }
 

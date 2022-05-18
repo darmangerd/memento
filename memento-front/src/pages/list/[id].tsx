@@ -1,13 +1,12 @@
-import React, {useCallback, useMemo, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {Box, Flex} from "rebass";
 import {ListController} from "../../controllers/ListController";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams, useSearchParams} from "react-router-dom";
 import MTitle from "../../components/MTitle";
 import {Language} from "../../types/Language";
 import MCard from "../../components/MCard";
 import MHeader from "../../components/MHeader";
 import MProgression from "../../components/MProgression";
-import styled from "styled-components";
 import {useFetch} from "../../hooks/useFetch";
 import MLoaderFullPage from "../../components/MLoaderFullPage";
 import {useKeyboard} from "../../hooks/useKeyboard";
@@ -17,28 +16,50 @@ import {useTimer} from "../../hooks/useTimer";
 import {Utils} from "../../classes/Utils";
 import MSwitch from "../../components/MSwitch";
 
-const Shadow = styled(Flex)({
-    height: "10vh",
-    width: "100%",
-    position: "fixed",
-    bottom: 0,
-    left: 0,
-    background: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)",
-    pointerEvents: "none",
-    zIndex: 10,
-    transform: "translate3d(0, 0, 5px)"
-});
-
 function ListView() {
     const {id} = useParams();
     const fetchFn = useCallback(() => ListController.getList(id as string), [id]);
-    const [isLoading, list, errors] = useFetch(fetchFn);
+
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [isLoading, list] = useFetch(fetchFn);
     const [currentCardIndex, setCurrentCardIndex] = useState(0);
     const [back, setBack] = useState(false);
     const [cardError, setCardError] = useState(false);
-    const [mode, setMode] = useState<"card" | "write">("write");
+    const [mode, setMode] = useState(searchParams.get("mode") || "card");
+    const [language, setLanguage] = useState<Language | undefined>(undefined);
     const navigate = useNavigate();
     const [time, resetTime] = useTimer();
+
+    useEffect(() => {
+        if (list) {
+            let lang = list.lang_source;
+
+            switch (searchParams.get("lang")) {
+                case "def": {
+                    lang = list.lang_def;
+                    break;
+                }
+                case "src": {
+                    lang = list.lang_source;
+                    break;
+                }
+            }
+
+            setLanguage(lang as Language);
+        }
+    }, [list]);
+
+    const definitionIndex = useMemo(() => {
+        if (!language || !list.words) return 1;
+        if (list.lang_def === language) return 0;
+        return 1;
+    }, [language, list]);
+
+    const progression = useMemo(() => {
+        if (!list?.words.length) return 0;
+
+        return currentCardIndex / (list.words.length - 1);
+    }, [currentCardIndex, isLoading]);
 
     const turnCurrentCard = useCallback(() => {
         setBack(!back);
@@ -71,18 +92,24 @@ function ListView() {
         Enter: () => setCardError(true)
     }, [back, currentCardIndex, list, cardError, mode]);
 
-    const progression = useMemo(() => {
-        if (!list?.words.length) return 0;
-
-        return currentCardIndex / (list.words.length - 1);
-    }, [currentCardIndex, isLoading]);
-
-    const changeMode = (mode: "card" | "write") => {
+    const changeMode = (mode: string) => {
         setBack(false);
         setCardError(false);
         setCurrentCardIndex(0);
         resetTime();
         setMode(mode);
+        setSearchParams({...Object.fromEntries(searchParams.entries()), mode}, {replace: true});
+    };
+
+    const changeLanguage = (language: Language) => {
+        let lang = "src";
+
+        if (language === list.lang_def) {
+            lang = "def";
+        }
+
+        setSearchParams({...Object.fromEntries(searchParams.entries()), lang}, {replace: true});
+        setLanguage(language);
     };
 
     const wrapView = useMemo(() => (previous: JSX.Element, current: JSX.Element, next: JSX.Element) => {
@@ -123,32 +150,29 @@ function ListView() {
                 </Flex>
             </Flex>
         );
-    }, [currentCardIndex, list, mode]);
+    }, [currentCardIndex, list, mode, definitionIndex, language]);
 
     const cardView = useMemo(() => wrapView(
-        <MCard height="calc(100vh - 250px)" definitionIndex={1}
-               definitionLanguage={list?.lang_def as Language}
+        <MCard height="calc(100vh - 250px)" definitionIndex={definitionIndex}
                words={list?.words[currentCardIndex - 1]} disabled={true}/>,
-        <MCard height="calc(100vh - 250px)" definitionIndex={1}
-               definitionLanguage={list?.lang_def as Language}
+        <MCard height="calc(100vh - 250px)" definitionIndex={definitionIndex}
                back={back}
                words={list?.words[currentCardIndex]} onClick={() => setBack(!back)}/>,
-        <MCard height="calc(100vh - 250px)" definitionIndex={1}
-               definitionLanguage={list?.lang_def as Language}
+        <MCard height="calc(100vh - 250px)" definitionIndex={definitionIndex}
                words={list?.words[currentCardIndex + 1]} disabled={true}/>
-    ), [currentCardIndex, list, back, mode]);
+    ), [currentCardIndex, list, back, mode, definitionIndex, language]);
 
     const writeView = useMemo(() => wrapView(
-        <MEditableCard height="calc(100vh - 250px)" definitionIndex={1}
-                       definitionLanguage={list?.lang_def as Language}
+        <MEditableCard height="calc(100vh - 250px)" definitionIndex={definitionIndex}
+                       definitionLanguage={language}
                        words={list?.words[currentCardIndex - 1]} disabled={true} status="success"/>,
-        <MEditableCard height="calc(100vh - 250px)" definitionIndex={1}
-                       definitionLanguage={list?.lang_def as Language}
+        <MEditableCard height="calc(100vh - 250px)" definitionIndex={definitionIndex}
+                       definitionLanguage={language}
                        words={list?.words[currentCardIndex]} onMatch={nextCard} status={cardError ? "error" : "idle"}/>,
-        <MEditableCard height="calc(100vh - 250px)" definitionIndex={1}
-                       definitionLanguage={list?.lang_def as Language}
+        <MEditableCard height="calc(100vh - 250px)" definitionIndex={definitionIndex}
+                       definitionLanguage={language}
                        words={list?.words[currentCardIndex + 1]} disabled={true} status="idle"/>
-    ), [currentCardIndex, list, back, cardError, mode]);
+    ), [currentCardIndex, list, back, cardError, mode, definitionIndex, language]);
 
     const getView = useMemo(() => {
         switch (mode) {
@@ -157,7 +181,7 @@ function ListView() {
             case "write":
                 return writeView;
         }
-    }, [mode, list, currentCardIndex, back, cardError]);
+    }, [mode, list, currentCardIndex, back, cardError, definitionIndex, language]);
 
     if (isLoading) {
         return <MLoaderFullPage/>;
@@ -181,16 +205,26 @@ function ListView() {
                 </Flex>
             </MHeader>
             <Flex justifyContent="center">
-                <MSwitch
-                    selected={mode}
-                    getText={(o) => o[0]}
-                    getValue={(o) => o[1]}
-                    onChange={(v: string) => changeMode(v as any)}
-                    options={[["Cards", "card"], ["Writing", "write"]]}
-                />
+                <Flex px={3}>
+                    <MSwitch
+                        selected={mode}
+                        getText={(o) => o[0]}
+                        getValue={(o) => o[1]}
+                        onChange={(v: string) => changeMode(v as any)}
+                        options={[["Cards", "card"], ["Writing", "write"]]}
+                    />
+                </Flex>
+                <Flex px={3}>
+                    <MSwitch
+                        getText={(l: Language) => l.lang}
+                        getValue={(l: Language) => l}
+                        onChange={changeLanguage}
+                        selected={language}
+                        options={[list.lang_source as Language, list.lang_def as Language]}
+                    />
+                </Flex>
             </Flex>
             {getView}
-            {/*<Shadow/>*/}
         </Box>
     );
 }

@@ -6,8 +6,7 @@ import MTitle from "./MTitle";
 import {Language} from "../types/Language";
 
 interface Props {
-    definitionIndex: number;
-    definitionLanguage: Language;
+    definitionIndex?: number;
     words: string[];
     height?: string | number;
     flex?: number;
@@ -65,6 +64,10 @@ function MCard(props: Props) {
     let sourceIndex = 0;
     if (props.definitionIndex === 0) {
         sourceIndex = 1;
+    }
+
+    if (props.definitionIndex === undefined) {
+        return <></>;
     }
 
     if (!props.words) {
