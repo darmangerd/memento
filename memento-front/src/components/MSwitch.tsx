@@ -23,7 +23,8 @@ const Wrapper = styled(Flex)({
 const Option = styled(Flex)((props: OptionProps) => ({
     background: props.selected ? "white" : "transparent",
     borderRadius: 10,
-    boxShadow: props.selected ? "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px" : ""
+    boxShadow: props.selected ? "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px" : "",
+    fontWeight: props.selected ? "bold" : "normal"
 }));
 
 function MSwitch<T = string[][], V = string>(props: Props<T, V>) {
