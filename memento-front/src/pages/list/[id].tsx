@@ -82,7 +82,9 @@ function ListView() {
     }, [currentCardIndex]);
 
     useKeyboard({
-        Space: turnCurrentCard,
+        Space: () => {
+            if (mode !== "write") turnCurrentCard();
+        },
         ArrowRight: () => {
             if (mode !== "write") nextCard();
         },
