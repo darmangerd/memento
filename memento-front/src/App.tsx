@@ -5,6 +5,8 @@ import ListCreate from "./pages/list/list-create";
 import { useAppDispatch } from "./store/hooks";
 import { loadLanguages } from "./store/stores/LangagesStore";
 import ListView from "./pages/list/[id]";
+import SignInPage from "./pages/sign-in";
+import SignUpPage from "./pages/sign-up";
 
 function App() {
     const dispatch = useAppDispatch();
@@ -19,6 +21,8 @@ function App() {
                 <Route path="/" element={<IndexPage />} />
                 <Route path="/list/create" element={<ListCreate />} />
                 <Route path="/list/:id" element={<ListView />} />
+                <Route path="/sign-in" element={<SignInPage />} />
+                <Route path="/sign-up" element={<SignUpPage />} />
             </Routes>
         </div>
     );

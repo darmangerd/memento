@@ -7,7 +7,7 @@ import {Language} from "../../types/Language";
 import MCard from "../../components/MCard";
 import MHeader from "../../components/MHeader";
 import MProgression from "../../components/MProgression";
-import {useFetch} from "../../hooks/useFetch";
+import {useAutomaticFetch} from "../../hooks/useAutomaticFetch";
 import MLoaderFullPage from "../../components/MLoaderFullPage";
 import {useKeyboard} from "../../hooks/useKeyboard";
 import {MdOutlineArrowBackIos, MdOutlineArrowForwardIos} from "react-icons/md";
@@ -21,7 +21,7 @@ function ListView() {
     const fetchFn = useCallback(() => ListController.getList(id as string), [id]);
 
     const [searchParams, setSearchParams] = useSearchParams();
-    const [isLoading, list] = useFetch(fetchFn);
+    const [isLoading, list] = useAutomaticFetch(fetchFn);
     const [currentCardIndex, setCurrentCardIndex] = useState(0);
     const [back, setBack] = useState(false);
     const [cardError, setCardError] = useState(false);

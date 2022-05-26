@@ -1,0 +1,32 @@
+POST http://localhost:80/api/sign-up
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "a@a.com",
+  "password": "pass123",
+  "password_confirmation": "pass123"
+}
+
+###
+
+POST http://localhost/api/sign-in/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "a@a.com",
+  "password": "pass"
+}
+
+###
+
+GET http://localhost/api/user/
+Accept: application/json
+Authorization: Bearer 8|aRFsVtrP3ydGUyn34fGpNRfMWInouL2jFKOvwzpQ
+
+###
+
+POST http://localhost/api/sign-out/
+Accept: application/json
+Authorization: Bearer 8|aRFsVtrP3ydGUyn34fGpNRfMWInouL2jFKOvwzpQ

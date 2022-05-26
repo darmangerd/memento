@@ -44,7 +44,7 @@ class MListController extends Controller
             'words' => $words
         ], [
             'name' => ['required', 'min:3', 'max:25'],
-            'words' => ['required', "array", "between:3,500"],
+            'words' => ['required', 'array', 'between:3,500'],
             'lang_source' => ['required', 'exists:languages,id'],
             'lang_def' => ['required', 'exists:languages,id']
         ]);

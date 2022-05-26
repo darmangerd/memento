@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -12,9 +14,61 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return User::all();
+        return $request->user();
+    }
+
+    public function sign_up(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => ['required', 'email', 'unique:users,email'],
+            'password' => ['required', 'min:5', 'confirmed']
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "errors" => $validator->errors()
+            ], 400);
+        }
+
+        $user = new User;
+        $user->email = $request->get('email');
+        $user->password = Hash::make($request->get('password'));
+        $user->save();
+
+        $token = $user->createToken($user->id);
+
+        return ['token' => $token->plainTextToken];
+    }
+
+    public function sign_in(Request $request)
+    {
+        $error = response()->json(["errors" => [
+            'email' => 'Wrong email or password'
+        ]], 401);
+
+        $user = User::where([
+            'email' => $request->get('email')
+        ])->first();
+
+        if (!isset($user)) {
+            return $error;
+        }
+
+        if (!Hash::check($request->get('password'), $user->password)) {
+            return $error;
+        }
+
+        $user->tokens()->delete();
+        $token = $user->createToken($user->id);
+
+        return ['token' => $token->plainTextToken];
+    }
+
+    public function sign_out(Request $request) {
+        $request->user()->tokens()->delete();
+        return ['status' => 'ok'];
     }
 
     /**

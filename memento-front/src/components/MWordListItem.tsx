@@ -37,7 +37,7 @@ function MWordListItem(props: Props) {
                         flexDirection="column"
                     >
                         <Box fontWeight={800}>{props.list.name}</Box>
-                        <Box fontWeight={500} opacity={0.5}>{props.list.creator?.login}</Box>
+                        <Box fontWeight={500} opacity={0.5}>{props.list.creator?.email}</Box>
                     </Flex>
                     <Flex
                         alignItems="center"

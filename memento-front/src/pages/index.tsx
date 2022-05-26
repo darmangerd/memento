@@ -5,11 +5,11 @@ import MWordList from "../components/MWordList";
 import {ListController} from "../controllers/ListController";
 import DefaultLayout from "../layouts/DefaultLayout";
 import MLoader from "../components/MLoader";
-import {useFetch} from "../hooks/useFetch";
+import {useAutomaticFetch} from "../hooks/useAutomaticFetch";
 import MLoaderFullPage from "../components/MLoaderFullPage";
 
 function IndexPage() {
-    const [isLoading, lists] = useFetch(ListController.getAllLists);
+    const [isLoading, lists] = useAutomaticFetch(ListController.getAllLists);
 
     if (isLoading) {
         return <MLoaderFullPage />;
