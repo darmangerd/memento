@@ -5,6 +5,7 @@ import MWordListItem from "./MWordListItem";
 
 interface Props {
     lists: Partial<List>[];
+    hideCreators?: boolean;
 }
 
 function MWordList(props: Props) {
@@ -20,7 +21,7 @@ function MWordList(props: Props) {
         >
             {
                 props.lists.map((l, index) => (
-                    <MWordListItem key={index} list={l}/>
+                    <MWordListItem hideCreator={props.hideCreators} key={index} list={l}/>
                 ))
             }
         </Box>

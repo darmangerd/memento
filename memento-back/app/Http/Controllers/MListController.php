@@ -16,7 +16,7 @@ class MListController extends Controller
      */
     public function index()
     {
-        return MList::all();
+        return MList::with(['creator', 'lang_source', 'lang_def'])->get();
     }
 
     public function one($id) {
@@ -31,6 +31,14 @@ class MListController extends Controller
      */
     public function store(Request $request)
     {
+        $user = $request->user();
+
+        if (empty($user)) {
+            return response()->json([
+                'errors' => ['user' => "You aren't logged in"]
+            ], 401);
+        }
+
         $words = $request->get("words");
         $words = array_reduce($words, function ($prev, $item) {
             if (!empty($item[0]) && !empty($item[1])) {
@@ -61,6 +69,7 @@ class MListController extends Controller
 
         $list = new MList;
 
+        $list->creator = $request->user()->id;
         $list->name = $name;
         $list->words = $words;
         $list->lang_source = $lang_source;

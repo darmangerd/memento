@@ -2,7 +2,7 @@ import React, {useMemo, useState} from "react";
 import {Flex} from "rebass";
 import MInputText from "../../components/MInputText";
 import {List} from "../../types/List";
-import {ListController} from "../../controllers/ListController";
+import {APIList} from "../../api/APIList";
 import {useAppSelector} from "../../store/hooks";
 import {selectLanguages} from "../../store/stores/LangagesStore";
 import MDropdown from "../../components/MDropdown";
@@ -13,11 +13,13 @@ import {RED_COLOR} from "../../constants/style";
 import {ErrorBuilder} from "../../classes/ErrorBuilder";
 import MDescription from "../../components/MDescription";
 import {useNavigate} from "react-router-dom";
+import {useUser} from "../../hooks/useUser";
 
 function ListCreate() {
     const navigate = useNavigate();
 
     const languages = useAppSelector(selectLanguages);
+    const {user} = useUser();
 
     const [error, setError] = useState<ErrorBuilder<keyof List>>();
 
@@ -105,7 +107,7 @@ function ListCreate() {
 
     async function publish() {
         try {
-            await ListController.postList(list);
+            await APIList.postList(list, user.token);
             setError(undefined);
             navigate("/");
         } catch (err: any) {

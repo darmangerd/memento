@@ -8,9 +8,11 @@ export class APIController {
         return `${APIController.baseURL}${url.join("/")}`;
     }
 
-    static async makeRequest<ResponseType = any, Errors extends keyof any = any>(init?: RequestInit, ...url: (string | number)[]) {
+    static async makeRequest<ResponseType = any, Errors extends keyof any = any>(url: string | number, init?: RequestInit) {
+        console.log(url, init);
+
         const res = await fetch(
-            APIController.getURL(...url),
+            this.getURL(url?.toString()),
             init
         );
         const data = await res.json();
@@ -23,20 +25,27 @@ export class APIController {
         return data as ResponseType;
     }
 
-    static async get<ResponseType = any, Errors extends keyof any = any>(...url: (string | number)[]) {
-        return this.makeRequest<ResponseType, Errors>({}, ...url);
+    static async get<ResponseType = any, Errors extends keyof any = any>(url: string | number, headers?: HeadersInit) {
+        return this.makeRequest<ResponseType, Errors>(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; charset=UTF-8",
+                ...(headers || {})
+            }
+        });
     }
 
-    static async post<DataType, ResponseType = any, Errors extends keyof any = any>(datas: DataType, ...url: (string | number)[]) {
+    static async post<DataType, ResponseType = any, Errors extends keyof any = any>(url: string | number, datas: DataType, headers?: HeadersInit) {
         return this.makeRequest<ResponseType, Errors>(
+            url,
             {
                 method: "POST",
                 body: JSON.stringify(datas),
                 headers: {
-                    "Content-Type": "application/json; charset=UTF-8"
+                    "Content-Type": "application/json; charset=UTF-8",
+                    ...(headers || {})
                 }
-            },
-            ...url
+            }
         );
     }
 }

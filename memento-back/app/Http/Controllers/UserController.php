@@ -12,16 +12,25 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function index(Request $request)
     {
-        return $request->user();
+        $user = $request->user();
+
+        return [
+            'id' => $user->id,
+            'email' => $user->email,
+            'lists' => $user->lists
+        ];
     }
 
     public function sign_up(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make([
+            ...$request->all(),
+            'email' => strtolower($request->get('email'))
+        ], [
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'min:5', 'confirmed']
         ]);
@@ -37,9 +46,10 @@ class UserController extends Controller
         $user->password = Hash::make($request->get('password'));
         $user->save();
 
-        $token = $user->createToken($user->id);
-
-        return ['token' => $token->plainTextToken];
+        return [
+            'email' => $user->email,
+            'id' => $user->id
+        ];
     }
 
     public function sign_in(Request $request)
@@ -63,10 +73,15 @@ class UserController extends Controller
         $user->tokens()->delete();
         $token = $user->createToken($user->id);
 
-        return ['token' => $token->plainTextToken];
+        return [
+            'token' => $token->plainTextToken,
+            'email' => $user->email,
+            'id' => $user->id
+        ];
     }
 
-    public function sign_out(Request $request) {
+    public function sign_out(Request $request)
+    {
         $request->user()->tokens()->delete();
         return ['status' => 'ok'];
     }
@@ -84,7 +99,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -95,7 +110,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\User  $user
+     * @param \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
     public function show(User $user)
@@ -106,7 +121,7 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\User  $user
+     * @param \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
     public function edit(User $user)
@@ -117,8 +132,8 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $user)
@@ -129,7 +144,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\User  $user
+     * @param \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
     public function destroy(User $user)

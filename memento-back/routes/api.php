@@ -17,12 +17,12 @@ use App\Http\Controllers\LanguageController;
 */
 
 
-Route::post('/list', [MListController::class, 'store']);
+Route::middleware('auth:sanctum')->post('/list', [MListController::class, 'store']);
 Route::get('/list', [MListController::class, 'index']);
 Route::get('/list/{id}', [MListController::class, 'one']);
 
 Route::middleware('auth:sanctum')->get('/user', [UserController::class, 'index']);
-Route::middleware('auth:sanctum')->post('/sign-out', [UserController::class, 'sign_out']);
+Route::middleware('auth:sanctum')->get('/sign-out', [UserController::class, 'sign_out']);
 Route::post('/sign-in', [UserController::class, 'sign_in']);
 Route::post('/sign-up', [UserController::class, 'sign_up']);
 

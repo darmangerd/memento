@@ -16,17 +16,23 @@ Accept: application/json
 
 {
   "email": "a@a.com",
-  "password": "pass"
+  "password": "pass123"
 }
 
 ###
 
 GET http://localhost/api/user/
 Accept: application/json
-Authorization: Bearer 8|aRFsVtrP3ydGUyn34fGpNRfMWInouL2jFKOvwzpQ
+Authorization: Bearer 126|5Is8FqKpasDm9xboGQlRTVp7FdL4d8oZzvnY6MBZ
 
 ###
 
 POST http://localhost/api/sign-out/
 Accept: application/json
 Authorization: Bearer 8|aRFsVtrP3ydGUyn34fGpNRfMWInouL2jFKOvwzpQ
+
+###
+
+GET http://localhost/api/list/
+Accept: application/json
+Authorization: Bearer 113|dqlIkVCzfssWnoJwkVuXalgj9IcJ9v2Kn0Pm576E

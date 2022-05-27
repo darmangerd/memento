@@ -1,12 +1,13 @@
 import React from "react";
 import {Box, Flex} from "rebass";
-import {GREY_COLOR, PRIMARY_COLOR} from "../constants/style";
+import {GREY_COLOR} from "../constants/style";
 import {List} from "../types/List";
 import {Link} from "react-router-dom";
 import styled from "styled-components";
 
 interface Props {
     list: Partial<List>;
+    hideCreator?: boolean;
 }
 
 const WordLink = styled(Link)({
@@ -37,17 +38,19 @@ function MWordListItem(props: Props) {
                         flexDirection="column"
                     >
                         <Box fontWeight={800}>{props.list.name}</Box>
-                        <Box fontWeight={500} opacity={0.5}>{props.list.creator?.email}</Box>
+                        {!props.hideCreator &&
+                            <Box fontWeight={500} opacity={0.5}>{props.list.creator?.email}</Box>
+                        }
                     </Flex>
                     <Flex
                         alignItems="center"
                     >
-                        <Box
-                            css={{borderRadius: "15px"}}
-                            width={30}
-                            height={30}
-                            backgroundColor={PRIMARY_COLOR}
-                        />
+                        {/*<Box*/}
+                        {/*    css={{borderRadius: "15px"}}*/}
+                        {/*    width={30}*/}
+                        {/*    height={30}*/}
+                        {/*    backgroundColor={PRIMARY_COLOR}*/}
+                        {/*/>*/}
                     </Flex>
                 </Flex>
             </Flex>

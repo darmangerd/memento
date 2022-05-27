@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {Box, Flex} from "rebass";
-import {ListController} from "../../controllers/ListController";
+import {APIList} from "../../api/APIList";
 import {useNavigate, useParams, useSearchParams} from "react-router-dom";
 import MTitle from "../../components/MTitle";
 import {Language} from "../../types/Language";
@@ -18,7 +18,7 @@ import MSwitch from "../../components/MSwitch";
 
 function ListView() {
     const {id} = useParams();
-    const fetchFn = useCallback(() => ListController.getList(id as string), [id]);
+    const fetchFn = useCallback(() => APIList.getList(id as string), [id]);
 
     const [searchParams, setSearchParams] = useSearchParams();
     const [isLoading, list] = useAutomaticFetch(fetchFn);
@@ -218,11 +218,11 @@ function ListView() {
                 </Flex>
                 <Flex px={3}>
                     <MSwitch
-                        getText={(l: Language) => l.lang}
+                        getText={(l: Language) => l?.lang}
                         getValue={(l: Language) => l}
                         onChange={changeLanguage}
                         selected={language}
-                        options={[list.lang_source as Language, list.lang_def as Language]}
+                        options={[list?.lang_source as Language, list?.lang_def as Language]}
                     />
                 </Flex>
             </Flex>
