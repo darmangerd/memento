@@ -17,7 +17,8 @@ interface OptionProps {
 
 const Wrapper = styled(Flex)({
     background: GREY_COLOR,
-    borderRadius: 13
+    borderRadius: 13,
+    flexShrink: 0
 });
 
 const Option = styled(Flex)((props: OptionProps) => ({

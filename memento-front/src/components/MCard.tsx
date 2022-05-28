@@ -13,6 +13,7 @@ interface Props {
     disabled?: boolean;
     back?: boolean;
     onClick?: () => any;
+    width?: string | number[] | number;
 }
 
 interface CardProps {
@@ -76,7 +77,7 @@ function MCard(props: Props) {
 
     return (
         <Card disabled={props.disabled} flex={props.flex} height={props.height}
-              width="100%"
+              width={props.width}
               transform={props.back ? "rotateX(180deg)" : ""} onClick={props.onClick}
               py={4} flexDirection="column">
             <Front opacity={props.disabled ? 0.3 : 1} alignItems="center" justifyContent="center" flex={1}>

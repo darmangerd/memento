@@ -116,96 +116,98 @@ function ListCreate() {
     }
 
     return (
-        <Flex px={5} py={4} flexDirection="column">
-            <MTitle>Create List</MTitle>
+        <Flex py={5} justifyContent="center">
+            <Flex width={0.9} flexDirection="column">
+                <MTitle>Create List</MTitle>
 
-            <Flex py={4} flexDirection="column">
-                <MLabel htmlFor="list-name">List name</MLabel>
-                <MInputText
-                    error={!!error?.pick("name")}
-                    id="list-name"
-                    placeholder="FCE vocabulary 1"
-                    onChange={({target: {value}}) => setName(value)}
-                />
-                <MDescription color={RED_COLOR}>{error?.pick("name")?.join(" ")}</MDescription>
-            </Flex>
-
-            <Flex flexDirection="column">
-                <Flex width="100%" py={4}>
-                    <Flex width={8 / 10}>
-                        <Flex pr={3} flexDirection="column" width={1 / 2}>
-                            <MLabel className="label-input" htmlFor="lang-source">Language source</MLabel>
-                            <MDropdown
-                                text={(option) => `${option.abbr} (${option.lang})`}
-                                onChange={(value) => setLanguages(value.id, "source")}
-                                options={languages}
-                                id="lang-source"
-                            />
-                        </Flex>
-
-                        <Flex pl={3} flexDirection="column" width={1 / 2}>
-                            <MLabel className="label-input" htmlFor="lang-definition">Language definition</MLabel>
-                            <MDropdown
-                                text={(option) => `${option.abbr} (${option.lang})`}
-                                onChange={(value) => setLanguages(value.id, "def")}
-                                options={languages}
-                                id="lang-definition"
-                            />
-                        </Flex>
-                    </Flex>
-                    <Flex width={2 / 10}/>
+                <Flex py={4} flexDirection="column">
+                    <MLabel htmlFor="list-name">List name</MLabel>
+                    <MInputText
+                        error={!!error?.pick("name")}
+                        id="list-name"
+                        placeholder="FCE vocabulary 1"
+                        onChange={({target: {value}}) => setName(value)}
+                    />
+                    <MDescription color={RED_COLOR}>{error?.pick("name")?.join(" ")}</MDescription>
                 </Flex>
+
                 <Flex flexDirection="column">
+                    <Flex width="100%" py={4}>
+                        <Flex width={8 / 10}>
+                            <Flex pr={3} flexDirection="column" width={1 / 2}>
+                                <MLabel className="label-input" htmlFor="lang-source">Language source</MLabel>
+                                <MDropdown
+                                    text={(option) => `${option.abbr} (${option.lang})`}
+                                    onChange={(value) => setLanguages(value.id, "source")}
+                                    options={languages}
+                                    id="lang-source"
+                                />
+                            </Flex>
+
+                            <Flex pl={3} flexDirection="column" width={1 / 2}>
+                                <MLabel className="label-input" htmlFor="lang-definition">Language definition</MLabel>
+                                <MDropdown
+                                    text={(option) => `${option.abbr} (${option.lang})`}
+                                    onChange={(value) => setLanguages(value.id, "def")}
+                                    options={languages}
+                                    id="lang-definition"
+                                />
+                            </Flex>
+                        </Flex>
+                        <Flex width={2 / 10}/>
+                    </Flex>
+                    <Flex flexDirection="column">
+                        {
+                            list.words?.map((wordDef, index) => (
+                                <Flex key={index}>
+                                    <Flex width={8 / 10}>
+                                        <Flex pr={3} width={1 / 2}>
+                                            <MInputText
+                                                id="list-name"
+                                                placeholder="..."
+                                                value={wordDef[0]}
+                                                onChange={({target: {value}}) => setWord(value, index, 0)}
+                                            />
+                                        </Flex>
+                                        <Flex pl={3} width={1 / 2}>
+                                            <MInputText
+                                                id="list-name"
+                                                placeholder="..."
+                                                value={wordDef[1]}
+                                                onChange={({target: {value}}) => setWord(value, index, 1)}
+                                            />
+                                        </Flex>
+                                    </Flex>
+                                    <Flex pl={3} width={2 / 10}>
+                                        <MButton onClick={() => deleteWord(index)} background={RED_COLOR}
+                                                 width="100%">delete</MButton>
+                                    </Flex>
+                                </Flex>
+                            ))
+                        }
+                    </Flex>
+                    <Flex pt={3}>
+                        <MButton disabled={!canAddWord} onClick={addWord} width="100%">Add a word</MButton>
+                    </Flex>
+                </Flex>
+                <Flex pt={2} justifyContent="center" alignItems="center" color={RED_COLOR} flexDirection="column">
                     {
-                        list.words?.map((wordDef, index) => (
-                            <Flex key={index}>
-                                <Flex width={8 / 10}>
-                                    <Flex pr={3} width={1 / 2}>
-                                        <MInputText
-                                            id="list-name"
-                                            placeholder="..."
-                                            value={wordDef[0]}
-                                            onChange={({target: {value}}) => setWord(value, index, 0)}
-                                        />
-                                    </Flex>
-                                    <Flex pl={3} width={1 / 2}>
-                                        <MInputText
-                                            id="list-name"
-                                            placeholder="..."
-                                            value={wordDef[1]}
-                                            onChange={({target: {value}}) => setWord(value, index, 1)}
-                                        />
-                                    </Flex>
-                                </Flex>
-                                <Flex pl={3} width={2 / 10}>
-                                    <MButton onClick={() => deleteWord(index)} background={RED_COLOR}
-                                             width="100%">delete</MButton>
-                                </Flex>
+                        error &&
+                        error.without<"name">("name").iterable.map(([key, value]) => (
+                            <Flex>
+                                <span>{key}:&nbsp;</span>
+                                {
+                                    value.map((v) => (
+                                        <span>{v}</span>
+                                    ))
+                                }
                             </Flex>
                         ))
                     }
                 </Flex>
-                <Flex pt={3}>
-                    <MButton disabled={!canAddWord} onClick={addWord} width="100%">Add a word</MButton>
+                <Flex width={1} justifyContent="center" alignItems="center" pt={5}>
+                    <MButton onClick={publish}>Publish</MButton>
                 </Flex>
-            </Flex>
-            <Flex pt={2} justifyContent="center" alignItems="center" color={RED_COLOR} flexDirection="column">
-                {
-                    error &&
-                    error.without<"name">("name").iterable.map(([key, value]) => (
-                        <Flex>
-                            <span>{key}:&nbsp;</span>
-                            {
-                                value.map((v) => (
-                                    <span>{v}</span>
-                                ))
-                            }
-                        </Flex>
-                    ))
-                }
-            </Flex>
-            <Flex width={1} justifyContent="center" alignItems="center" pt={5}>
-                <MButton onClick={publish}>Publish</MButton>
             </Flex>
         </Flex>
     );

@@ -65,10 +65,10 @@ function IndexPage() {
                     {user.email}
                 </Flex>
                 <Flex>
-                    <Flex mr={3}>
+                    <Flex flexShrink={0} mr={3}>
                         <MButton background={RED_COLOR} onClick={signOut}>Sign out</MButton>
                     </Flex>
-                    <Flex>
+                    <Flex flexShrink={0}>
                         <MLinkButton href="/list/create">Create a list</MLinkButton>
                     </Flex>
                 </Flex>

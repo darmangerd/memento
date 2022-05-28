@@ -25,6 +25,8 @@ export function ButtonComponent(props: ButtonProps) {
         fontSize: "1.1rem",
         transition: "all 0.2s",
         width: props.width,
+        whiteSpace: "nowrap",
+        textAlign: "center",
 
         ":disabled": {
             cursor: "default",
@@ -46,6 +48,10 @@ export function ButtonComponent(props: ButtonProps) {
 
         ":active": {
             boxShadow: `-1px 11px 15px -5px rgba(${propsWithoutRGB}, 0.5)`
+        },
+
+        "@media (max-width: 768px)": {
+            fontSize: "0.9rem"
         }
-    };
+    } as any;
 }

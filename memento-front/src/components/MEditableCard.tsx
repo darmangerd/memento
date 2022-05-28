@@ -19,6 +19,7 @@ interface Props {
     background?: string;
     borderColor?: string;
     status?: "success" | "error" | "idle";
+    width?: string | number[] | number;
 }
 
 interface CardProps {
@@ -90,7 +91,7 @@ function MEditableCard(props: Props) {
 
     return (
         <Card disabled={props.disabled} flex={props.flex} height={props.height}
-              width="100%"
+              width={props.width}
               onClick={props.onClick}
               py={4} flexDirection="column"
               background={props.background}
@@ -102,7 +103,7 @@ function MEditableCard(props: Props) {
                     </Flex>
                     {props.status !== "success" ?
                         <MInputText value={text} background={"rgba(0, 0, 0, 0.08)"} onChange={({target}) => setText(target.value)}
-                                    placeholder={`Your answer in "${props.definitionLanguage?.lang.toLocaleLowerCase()}"`}/>
+                                    placeholder={props.disabled ? "..." : `Your answer in "${props.definitionLanguage?.lang.toLocaleLowerCase()}"`}/>
                         :
                         <Flex pb={4} pl={2} width={1}>
                             <MTitle mb={0}>{props.words?.[props.definitionIndex]}</MTitle>

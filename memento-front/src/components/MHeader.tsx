@@ -25,9 +25,9 @@ const Header = styled(Flex)({
 
 function MHeader(props: Props) {
     return (
-        <Box>
-            <HeaderWrapper minHeight={props.minHeight}>
-                <Header my={2} mx={3} flex={1}>
+        <Box maxWidth="100%">
+            <HeaderWrapper maxWidth="100%" minHeight={props.minHeight}>
+                <Header maxWidth="100%" my={2} mx={3} flex={1}>
                     <Flex flex={1} alignItems="center">
                         {props.children}
                     </Flex>

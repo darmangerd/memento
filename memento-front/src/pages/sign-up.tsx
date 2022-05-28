@@ -34,15 +34,15 @@ function SignUpPage() {
     };
 
     return (
-        <Flex py={5} minHeight="100vh" alignItems="center" justifyContent="center">
-            <Flex flexDirection="column">
-                <Flex mb={4}>
+        <Flex flex={1} minHeight="100vh" justifyContent="center" alignItems="center">
+            <Flex width={[0.9, 1 / 2, 1 / 3]} py={5} flexDirection="column">
+                <Flex width={1} mb={4}>
                     <MTitle>Sign up</MTitle>
                 </Flex>
-                <Flex flexDirection="column">
+                <Flex width={1} flexDirection="column">
                     <Flex mb={4} flexDirection="column">
                         <MLabel htmlFor="email">Email</MLabel>
-                        <MInputText id="email" placeholder="Email" value={email}
+                        <MInputText type="email" id="email" placeholder="Email" value={email}
                                     onChange={({target}) => setEmail(target.value)} success={!!datas}
                                     error={!!errors?.pick("email")} onKeyDown={handleEnter}/>
                         {errors?.pick("email") &&
@@ -51,7 +51,7 @@ function SignUpPage() {
                     </Flex>
                     <Flex mb={4} flexDirection="column">
                         <MLabel htmlFor="password">Password</MLabel>
-                        <MInputText id="password" placeholder="Password" value={password}
+                        <MInputText type="password" id="password" placeholder="Password" value={password}
                                     onChange={({target}) => setPassword(target.value)} success={!!datas}
                                     error={!!errors?.pick("password")} onKeyDown={handleEnter}/>
                         {errors?.pick("password") &&
@@ -60,7 +60,7 @@ function SignUpPage() {
                     </Flex>
                     <Flex flexDirection="column">
                         <MLabel htmlFor="password">Confirm your password</MLabel>
-                        <MInputText id="password" placeholder="Password confirmation" value={passwordConfirmation}
+                        <MInputText type="password" id="password" placeholder="Password confirmation" value={passwordConfirmation}
                                     onChange={({target}) => setPasswordConfirmation(target.value)} success={!!datas}
                                     error={!!errors?.pick("password")} onKeyDown={handleEnter}/>
                     </Flex>

@@ -119,7 +119,7 @@ function ListView() {
 
         return (
             <Flex px={3} justifyContent="space-between" my={3} width="100%" flex={1}>
-                <Flex width={1 / 5}>
+                <Flex width={[0, 1 / 5]}>
                     {currentCardIndex - 1 >= 0 &&
                         previous
                     }
@@ -145,7 +145,7 @@ function ListView() {
                         }
                     </Flex>
                 </Flex>
-                <Flex width={1 / 5}>
+                <Flex width={[0, 1 / 5]}>
                     {currentCardIndex + 1 < list?.words.length &&
                         next
                     }
@@ -154,24 +154,26 @@ function ListView() {
         );
     }, [currentCardIndex, list, mode, definitionIndex, language]);
 
+    const height = "calc(100vh - 300px)";
+
     const cardView = useMemo(() => wrapView(
-        <MCard height="calc(100vh - 250px)" definitionIndex={definitionIndex}
+        <MCard width={[1]} height={height} definitionIndex={definitionIndex}
                words={list?.words[currentCardIndex - 1]} disabled={true}/>,
-        <MCard height="calc(100vh - 250px)" definitionIndex={definitionIndex}
+        <MCard width={[1]} height={height} definitionIndex={definitionIndex}
                back={back}
                words={list?.words[currentCardIndex]} onClick={() => setBack(!back)}/>,
-        <MCard height="calc(100vh - 250px)" definitionIndex={definitionIndex}
+        <MCard width={[1]} height={height} definitionIndex={definitionIndex}
                words={list?.words[currentCardIndex + 1]} disabled={true}/>
     ), [currentCardIndex, list, back, mode, definitionIndex, language]);
 
     const writeView = useMemo(() => wrapView(
-        <MEditableCard height="calc(100vh - 250px)" definitionIndex={definitionIndex}
+        <MEditableCard width={[1]} height={height} definitionIndex={definitionIndex}
                        definitionLanguage={language}
                        words={list?.words[currentCardIndex - 1]} disabled={true} status="success"/>,
-        <MEditableCard height="calc(100vh - 250px)" definitionIndex={definitionIndex}
+        <MEditableCard width={[1]} height={height} definitionIndex={definitionIndex}
                        definitionLanguage={language}
                        words={list?.words[currentCardIndex]} onMatch={nextCard} status={cardError ? "error" : "idle"}/>,
-        <MEditableCard height="calc(100vh - 250px)" definitionIndex={definitionIndex}
+        <MEditableCard width={[1]} height={height} definitionIndex={definitionIndex}
                        definitionLanguage={language}
                        words={list?.words[currentCardIndex + 1]} disabled={true} status="idle"/>
     ), [currentCardIndex, list, back, cardError, mode, definitionIndex, language]);
@@ -194,20 +196,23 @@ function ListView() {
             <MProgression progression={progression}/>
             <MHeader minHeight={90}>
                 <Flex flex={1} mx={4} justifyContent="space-between" alignItems="center">
-                    <Flex minWidth={200}>
+                    <Flex minWidth={50}>
                         <button onClick={() => navigate(-1)}>
                             <MdOutlineArrowBackIos/>
                         </button>
                     </Flex>
-                    <MTitle mb={0}>{list?.name}</MTitle>
-                    <Flex justifyContent="flex-end" textAlign="right" minWidth={200} fontFamily="Roboto Mono"
+                    <Flex flex={1}>
+                        <MTitle mobileFontSize="1.2rem" mb={0}>{list?.name}</MTitle>
+                    </Flex>
+                    <Flex flex={1} overflow="hidden" justifyContent="flex-end" textAlign="right" minWidth={100}
+                          fontFamily="Roboto Mono"
                           opacity={0.3}>
                         {Utils.secondsToDate(time)}
                     </Flex>
                 </Flex>
             </MHeader>
-            <Flex justifyContent="center">
-                <Flex px={3}>
+            <Flex flexWrap="wrap" justifyContent="center">
+                <Flex mb={2} px={3}>
                     <MSwitch
                         selected={mode}
                         getText={(o) => o[0]}
@@ -216,7 +221,7 @@ function ListView() {
                         options={[["Cards", "card"], ["Writing", "write"]]}
                     />
                 </Flex>
-                <Flex px={3}>
+                <Flex mb={2} px={3}>
                     <MSwitch
                         getText={(l: Language) => l?.lang}
                         getValue={(l: Language) => l}
