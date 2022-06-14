@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from "react";
-import {Flex} from "rebass";
+import {Box, Flex} from "rebass";
 import MInputText from "../../components/MInputText";
 import {List} from "../../types/List";
 import {APIList} from "../../api/APIList";
@@ -14,6 +14,9 @@ import {ErrorBuilder} from "../../classes/ErrorBuilder";
 import MDescription from "../../components/MDescription";
 import {useNavigate} from "react-router-dom";
 import {useUser} from "../../hooks/useUser";
+import MHeader from "../../components/MHeader";
+import {MdOutlineArrowBackIos} from "react-icons/md";
+import {Utils} from "../../classes/Utils";
 
 function ListCreate() {
     const navigate = useNavigate();
@@ -118,7 +121,20 @@ function ListCreate() {
     return (
         <Flex py={5} justifyContent="center">
             <Flex width={0.9} flexDirection="column">
-                <MTitle>Create List</MTitle>
+                <MHeader minHeight={90}>
+                    <Flex flex={1} mx={4} justifyContent="space-between" alignItems="center">
+                        <Flex minWidth={50}>
+                            <button onClick={() => navigate(-1)}>
+                                <MdOutlineArrowBackIos/>
+                            </button>
+                        </Flex>
+                        <Flex justifyContent="center" flex={1}>
+                            <MTitle mobileFontSize="1.2rem" mb={0}>{list.name || "Create your list"}</MTitle>
+                        </Flex>
+                        <Flex minWidth={50}>
+                        </Flex>
+                    </Flex>
+                </MHeader>
 
                 <Flex py={4} flexDirection="column">
                     <MLabel htmlFor="list-name">List name</MLabel>

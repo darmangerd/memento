@@ -27,6 +27,7 @@ export function ButtonComponent(props: ButtonProps) {
         width: props.width,
         whiteSpace: "nowrap",
         textAlign: "center",
+        justifyContent: "center",
 
         ":disabled": {
             cursor: "default",
